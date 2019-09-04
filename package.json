@@ -1,0 +1,17 @@
+{
+  "name": "berri-bot",
+  "version": "1.0.0",
+  "description": "Berri Berri Bot - Telegram Bot for Berri Berri House",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "node index.js"
+  },
+  "author": "Haziq Hafizi",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}
