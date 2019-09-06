@@ -1,13 +1,13 @@
-export function checkRegistered(id, registered) {
+exports.checkRegistered = (id, registered) => {
   console.log("CHECK REGISTEREASDASDJASLDJASKDJLKASJDLKASJDLAKSJD");
   if (registered[id] != null) {
     return true;
   }
 
   return false;
-}
+};
 
-export function printSchedule(cookSchedule) {
+exports.printSchedule = cookSchedule => {
   console.log("Print schedule");
   var data = "--- COOK SCHEDULE FOR BERRI HOUSE ---\n";
   var today = new Date();
@@ -21,9 +21,9 @@ export function printSchedule(cookSchedule) {
   }
 
   return data;
-}
+};
 
-export function shiftCookSchedule() {
+exports.shiftCookSchedule = () => {
   var firstElement = users.shift();
   users.push(firstElement);
-}
+};

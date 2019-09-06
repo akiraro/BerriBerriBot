@@ -1,9 +1,12 @@
-import * as Message from "./message";
-import { checkRegistered, printSchedule, shiftCookSchedule } from "./helper";
+// import * as Message from "./message";
+// import { Work.checkRegistered, Work.printSchedule, Work.printSchedule } from "./helper.js";
 
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
+
+var Message = require("./message.js"); // Test
+var Work = require("./helper.js");
 
 // 944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ  Telegram API
 
@@ -82,7 +85,7 @@ app.post("/", function(req, res) {
     switch (message.text) {
       case "/register": // User register -> Wait user input
         console.log("Doing /register");
-        checkRegistered(message.from.id, registered)
+        Work.checkRegistered(message.from.id, registered)
           ? Message.sendMessage(
               message.chat.id,
               "Uh oh, dont be dumb. You already register",
@@ -118,14 +121,14 @@ app.post("/", function(req, res) {
       case "/schedule": // Show the cook schedule
         Message.sendMessage(
           message.chat.id,
-          printSchedule(cookSchedule),
+          Work.printSchedule(cookSchedule),
           null,
           res
         );
         break;
 
       case "/shiftcookschedule": // Shift the cook schedule
-        shiftCookSchedule();
+        Work.printSchedule();
         break;
 
       case "/addschedule": // Add user to the cook schedule -> Wait user input

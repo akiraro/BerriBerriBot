@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-export function sendMessage(chat_id, text, keyboard, res) {
+exports.sendMessage = (chat_id, text, keyboard, res) => {
   var bodyReq = {};
   if (keyboard == null) {
     bodyReq = { chat_id: chat_id, text: text };
@@ -25,9 +25,9 @@ export function sendMessage(chat_id, text, keyboard, res) {
       console.log("Error :", err);
       res.end("Error :" + err);
     });
-}
+};
 
-export function editMessage(cbQuery, text, keyboard, res) {
+exports.editMessage = (cbQuery, text, keyboard, res) => {
   var bodyReq = {
     chat_id: cbQuery.message.chat.id,
     message_id: cbQuery.message.message_id,
@@ -49,9 +49,9 @@ export function editMessage(cbQuery, text, keyboard, res) {
       console.log(err);
       res.end();
     });
-}
+};
 
-export function deleteMessage(cbQuery, res) {
+exports.deleteMessage = (cbQuery, res) => {
   var bodyReq = {
     chat_id: cbQuery.message.chat.id,
     message_id: cbQuery.message.message_id
@@ -71,4 +71,4 @@ export function deleteMessage(cbQuery, res) {
       console.log(err);
       res.end();
     });
-}
+};
