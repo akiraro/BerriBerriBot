@@ -7,6 +7,7 @@ var bodyParser = require("body-parser");
 
 var Message = require("./message.js"); // Test
 var Work = require("./helper.js");
+var Controller = require("./controller.js");
 
 // 944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ  Telegram API
 
@@ -85,20 +86,21 @@ app.post("/", function(req, res) {
     switch (message.text) {
       case "/register": // User register -> Wait user input
         console.log("Doing /register");
-        Work.checkRegistered(message.from.id, registered)
-          ? Message.sendMessage(
-              message.chat.id,
-              "Uh oh, dont be dumb. You already register",
-              null,
-              res
-            )
-          : (Message.sendMessage(
-              message.chat.id,
-              "Please enter your name",
-              null,
-              res
-            ),
-            (store[message.from.id] = "/register"));
+        Controller.registerUser("test", "test");
+        // Work.checkRegistered(message.from.id, registered)
+        //   ? Message.sendMessage(
+        //       message.chat.id,
+        //       "Uh oh, dont be dumb. You already register",
+        //       null,
+        //       res
+        //     )
+        //   : (Message.sendMessage(
+        //       message.chat.id,
+        //       "Please enter your name",
+        //       null,
+        //       res
+        //     ),
+        //     (store[message.from.id] = "/register"));
         break;
 
       case "/register2": // Next step user registration
