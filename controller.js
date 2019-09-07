@@ -18,7 +18,8 @@ exports.registerUser = (id, username, res) => {
         console.log(err);
         res.end();
       } else {
-        console.log("SUCCEED");
+        console.log("SUCCESS : USER REGISTERED");
+        connection.destroy();
         res.end();
       }
     }
