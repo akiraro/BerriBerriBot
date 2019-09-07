@@ -170,6 +170,6 @@ app.post("/", function(req, res) {
 // Finally, start our server
 app.listen(process.env.PORT || 3000, function() {
   console.log("Telegram app listening on port 3000!");
-  registered["cibai"] = "sial";
-  console.log(registered);
+  // registered["cibai"] = "sial";
+  // console.log(registered);
 });

@@ -3,7 +3,6 @@ const config = require("./config");
 const connection = mysql.createConnection(config);
 
 exports.registerUser = (id, username) => {
-  connection.connect();
   const queryString =
     "INSERT INTO `Users` (`id`,`user_id`,`username`) VALUES (?,?,?)";
 
@@ -16,6 +15,4 @@ exports.registerUser = (id, username) => {
       }
     }
   );
-
-  connection.end();
 };
