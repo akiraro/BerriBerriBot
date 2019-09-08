@@ -86,7 +86,7 @@ app.post("/", function(req, res) {
     switch (message.text) {
       case "/register": // User register -> Wait user input
         console.log("Doing /register");
-        Controller.checkRegistered(user_id, res);
+        Controller.checkRegistered(message.from.id, res);
         // Work.checkRegistered(message.from.id, registered)
         //   ? Message.sendMessage(
         //       message.chat.id,
