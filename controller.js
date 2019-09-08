@@ -40,7 +40,7 @@ exports.checkRegistered = (user_id, cb) => {
   });
 };
 
-exports.getUsers = () => {
+exports.getUsers = cb => {
   const queryString = "SELECT * FROM Users";
 
   connection.query(queryString, [], (err, rows, fields) => {
@@ -49,6 +49,7 @@ exports.getUsers = () => {
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
       console.log(rows);
+      cb(rows);
     } else {
     }
   });

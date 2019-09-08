@@ -137,27 +137,28 @@ app.post("/", function(req, res) {
         break;
 
       case "/addschedule": // Add user to the cook schedule -> Wait user input
-        Controller.getUsers();
+        Controller.getUsers(function(result) {
+          var inlineKeyboard = [[]];
+          for (var i = 0; i < result.length; i++) {
+            inlineKeyboard[0].push({
+              text: result[i].username,
+              callback_data: result[i].username
+            });
+          }
+          inlineKeyboard.push([
+            {
+              text: "Done",
+              callback_data: "done"
+            }
+          ]);
+          Message.sendMessage(
+            message.chat.id,
+            "Who will be in the cook schedule ?",
+            inlineKeyboard,
+            res
+          );
+        });
 
-        // var inlineKeyboard = [[]];
-        // for (const [key, value] of Object.entries(registered)) {
-        //   inlineKeyboard[0].push({
-        //     text: value,
-        //     callback_data: value
-        //   });
-        // }
-        // inlineKeyboard.push([
-        //   {
-        //     text: "Done",
-        //     callback_data: "done"
-        //   }
-        // ]);
-        // Message.sendMessage(
-        //   message.chat.id,
-        //   "Who will be in the cook schedule ?",
-        //   inlineKeyboard,
-        //   res
-        // );
         break;
 
       case "/hehe":
