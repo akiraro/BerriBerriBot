@@ -19,7 +19,6 @@ exports.registerUser = (id, username, res) => {
         res.end();
       } else {
         console.log("SUCCESS : USER REGISTERED");
-        connection.end();
         res.end();
       }
     }
@@ -37,7 +36,6 @@ exports.checkRegistered = user_id => {
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
       console.log(rows);
-      connection.end();
       console.log("Return TRUE");
       return true;
     } else {
