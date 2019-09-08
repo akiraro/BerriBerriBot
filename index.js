@@ -51,27 +51,30 @@ app.post("/", function(req, res) {
         break;
 
       default:
-        cookSchedule.push(cbQuery.data);
-        var inlineKeyboard = [[]];
-        for (const [key, value] of Object.entries(registered)) {
-          inlineKeyboard[0].push({
-            text: value,
-            callback_data: value
-          });
-        }
-        inlineKeyboard.push([
-          {
-            text: "Done",
-            callback_data: "done"
+        /* Need a controller to add user to the database */
+        Controller.getUsers(function(result) {
+          var inlineKeyboard = [[]];
+          for (var i = 0; i < result.length; i++) {
+            inlineKeyboard[0].push({
+              text: result[i].username,
+              callback_data: result[i].username
+            });
           }
-        ]);
-        Message.editMessage(
-          cbQuery,
-          cbQuery.data +
-            " added to the schedule. Who else will be in the cook schedule ?",
-          inlineKeyboard,
-          res
-        );
+          inlineKeyboard.push([
+            {
+              text: "Done",
+              callback_data: "done"
+            }
+          ]);
+          Message.editMessage(
+            cbQuery,
+            cbQuery.data +
+              " added to the schedule. Who else will be in the cook schedule ?",
+            inlineKeyboard,
+            res
+          );
+        });
+      // cookSchedule.push(cbQuery.data);
     }
   } else {
     // Handle normal command
