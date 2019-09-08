@@ -27,19 +27,29 @@ exports.registerUser = (id, username, res) => {
 
 exports.checkRegistered = (user_id, cb) => {
   const queryString = "SELECT username FROM Users WHERE `user_id` = ?";
-  console.log("user id is " + user_id);
+
   connection.query(queryString, [user_id], (err, rows, fields) => {
-    console.log(rows);
-    console.log("rows length is " + rows.length);
     if (err) {
       console.log(err);
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
-      console.log("Return TRUE");
       cb(true);
     } else {
-      console.log("Return FALSE");
       cb(false);
+    }
+  });
+};
+
+exports.getUsers = () => {
+  const queryString = "SELECT * FROM Users";
+
+  connection.query(queryString, [], (err, rows, fields) => {
+    if (err) {
+      console.log(err);
+    } else if (rows.length != 0) {
+      console.log("SUCCESS : USER FOUND");
+      console.log(rows);
+    } else {
     }
   });
 };

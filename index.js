@@ -101,15 +101,14 @@ app.post("/", function(req, res) {
               "Please enter your name",
               null,
               res
-            ),
-              (store[message.from.id] = "/register");
+            );
+            store[message.from.id] = "/register";
           }
         });
         break;
 
       case "/register2": // Next step user registration
         store[message.from.id] = null;
-        registered[message.from.id] = tempData; // need to fix this
         Controller.registerUser(message.from.id, tempData, res);
         Message.sendMessage(
           message.chat.id,
@@ -138,25 +137,27 @@ app.post("/", function(req, res) {
         break;
 
       case "/addschedule": // Add user to the cook schedule -> Wait user input
-        var inlineKeyboard = [[]];
-        for (const [key, value] of Object.entries(registered)) {
-          inlineKeyboard[0].push({
-            text: value,
-            callback_data: value
-          });
-        }
-        inlineKeyboard.push([
-          {
-            text: "Done",
-            callback_data: "done"
-          }
-        ]);
-        Message.sendMessage(
-          message.chat.id,
-          "Who will be in the cook schedule ?",
-          inlineKeyboard,
-          res
-        );
+        Controller.getUsers();
+
+        // var inlineKeyboard = [[]];
+        // for (const [key, value] of Object.entries(registered)) {
+        //   inlineKeyboard[0].push({
+        //     text: value,
+        //     callback_data: value
+        //   });
+        // }
+        // inlineKeyboard.push([
+        //   {
+        //     text: "Done",
+        //     callback_data: "done"
+        //   }
+        // ]);
+        // Message.sendMessage(
+        //   message.chat.id,
+        //   "Who will be in the cook schedule ?",
+        //   inlineKeyboard,
+        //   res
+        // );
         break;
 
       case "/hehe":
