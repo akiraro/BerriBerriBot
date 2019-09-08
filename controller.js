@@ -30,6 +30,7 @@ exports.checkRegistered = user_id => {
   const queryString = "SELECT username FROM Users WHERE `user_id` = ?";
 
   connection.query(queryString, [user_id], (err, rows, fields) => {
+    console.log(rows);
     console.log("rows length is " + rows.length);
     if (err) {
       console.log(err);
@@ -37,6 +38,7 @@ exports.checkRegistered = user_id => {
       console.log("SUCCESS : USER FOUND");
       console.log(rows);
       connection.end();
+      console.log("Return TRUE");
       return true;
     } else {
       return false;
