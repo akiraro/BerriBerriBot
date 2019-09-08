@@ -25,7 +25,7 @@ exports.registerUser = (id, username, res) => {
   );
 };
 
-exports.checkRegistered = user_id => {
+exports.checkRegistered = async user_id => {
   status = null;
   const queryString = "SELECT username FROM Users WHERE `user_id` = ?";
   console.log("user id is " + user_id);
@@ -44,5 +44,6 @@ exports.checkRegistered = user_id => {
       status = false;
     }
   });
+
   return status;
 };
