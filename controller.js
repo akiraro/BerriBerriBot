@@ -40,6 +40,7 @@ exports.checkRegistered = user_id => {
       console.log("Return TRUE");
       status = true;
     } else {
+      console.log("Return FALSE");
       status = false;
     }
   });
