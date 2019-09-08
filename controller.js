@@ -28,7 +28,7 @@ exports.registerUser = (id, username, res) => {
 
 exports.checkRegistered = user_id => {
   const queryString = "SELECT username FROM Users WHERE `user_id` = ?";
-
+  console.log("user id is " + user_id);
   connection.query(queryString, [user_id], (err, rows, fields) => {
     console.log(rows);
     console.log("rows length is " + rows.length);
