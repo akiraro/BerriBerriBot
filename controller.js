@@ -25,8 +25,7 @@ exports.registerUser = (id, username, res) => {
   );
 };
 
-exports.checkRegistered = async user_id => {
-  status = null;
+exports.checkRegistered = (user_id, cb) => {
   const queryString = "SELECT username FROM Users WHERE `user_id` = ?";
   console.log("user id is " + user_id);
   connection.query(queryString, [user_id], (err, rows, fields) => {
@@ -36,14 +35,11 @@ exports.checkRegistered = async user_id => {
       console.log(err);
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
-      console.log(rows);
       console.log("Return TRUE");
-      status = true;
+      cb(true);
     } else {
       console.log("Return FALSE");
-      status = false;
+      cb(false);
     }
   });
-
-  return status;
 };
