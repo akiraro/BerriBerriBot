@@ -25,3 +25,19 @@ exports.registerUser = (id, username, res) => {
     }
   );
 };
+
+exports.checkRegistered = (user_id, res) => {
+  const queryString = "SELECT username FROM Users WHERE `user_id` = ?";
+
+  connection.query(queryString, [user_id], (err, rows, fields) => {
+    if (err) {
+      console.log(err);
+      res.end();
+    } else {
+      console.log("SUCCESS : USER FOUND");
+      console.log(rows);
+      connection.destroy();
+      res.end();
+    }
+  });
+};

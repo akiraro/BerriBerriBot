@@ -86,26 +86,26 @@ app.post("/", function(req, res) {
     switch (message.text) {
       case "/register": // User register -> Wait user input
         console.log("Doing /register");
-        Work.checkRegistered(message.from.id, registered)
-          ? Message.sendMessage(
-              message.chat.id,
-              "Uh oh, dont be dumb. You already register",
-              null,
-              res
-            )
-          : (Message.sendMessage(
-              message.chat.id,
-              "Please enter your name",
-              null,
-              res
-            ),
-            (store[message.from.id] = "/register"));
+        Controller.checkRegistered(user_id, res);
+        // Work.checkRegistered(message.from.id, registered)
+        //   ? Message.sendMessage(
+        //       message.chat.id,
+        //       "Uh oh, dont be dumb. You already register",
+        //       null,
+        //       res
+        //     )
+        //   : (Message.sendMessage(
+        //       message.chat.id,
+        //       "Please enter your name",
+        //       null,
+        //       res
+        //     ),
+        //     (store[message.from.id] = "/register"));
         break;
 
       case "/register2": // Next step user registration
-        users.push(tempData);
         store[message.from.id] = null;
-        registered[message.from.id] = tempData;
+        registered[message.from.id] = tempData; // need to fix this
         Controller.registerUser(message.from.id, tempData, res);
         Message.sendMessage(
           message.chat.id,
