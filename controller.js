@@ -44,6 +44,5 @@ exports.checkRegistered = user_id => {
       status = false;
     }
   });
-
   return status;
 };
