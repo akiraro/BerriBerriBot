@@ -31,7 +31,7 @@ app.use(
 );
 
 app.post("/shiftSchedule", function(req, res) {
-  Controller.shiftSchedule();
+  Controller.shiftSchedule(res);
 });
 
 //This is the route the API will call

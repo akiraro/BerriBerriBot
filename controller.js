@@ -106,7 +106,7 @@ exports.getCookSchedule = cb => {
   });
 };
 
-exports.shiftSchedule = () => {
+exports.shiftSchedule = res => {
   const queryString =
     "UPDATE Cook SET sequence = ((SELECT sequence FROM (SELECT * FROM Cook)  AS temp3 LIMIT 1) + (SELECT COUNT(*) FROM (SELECT * FROM Cook)  AS temp2))  WHERE user_id = (SELECT user_id FROM (SELECT * FROM Cook LIMIT 1)  AS temp) LIMIT 1";
   const queryString2 = "ALTER TABLE Cook ORDER BY sequence ASC";
@@ -119,7 +119,9 @@ exports.shiftSchedule = () => {
     if (err) {
       console.log(err);
     } else {
-      connection.query(queryString2, [], (err, rows, fields) => {});
+      connection.query(queryString2, [], (err, rows, fields) => {
+        res.end("ok");
+      });
     }
   });
 };
