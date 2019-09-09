@@ -13,15 +13,8 @@ var Controller = require("./controller.js");
 
 var users = ["haziq", "albar", "zul", "abid"];
 var cookSchedule = [];
-var registered = {};
 var store = {}; // to store user previous command
 var tempData = ""; // temperory data
-
-// Dummy data for test
-registered[23232323] = "Albar";
-registered[12121212] = "Zul";
-registered[34343434] = "Hanif";
-// -----------------------
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(
@@ -76,7 +69,6 @@ app.post("/", function(req, res) {
             res
           );
         });
-      // cookSchedule.push(cbQuery.data);
     }
   } else {
     // Handle normal command
@@ -129,12 +121,15 @@ app.post("/", function(req, res) {
         break;
 
       case "/schedule": // Show the cook schedule
-        Message.sendMessage(
-          message.chat.id,
-          Work.printSchedule(cookSchedule),
-          null,
-          res
-        );
+        Controller.getCookSchedule(function(result) {
+          Message.sendMessage(
+            message.chat.id,
+            Work.printSchedule(result),
+            null,
+            res
+          );
+        });
+
         break;
 
       case "/shiftcookschedule": // Shift the cook schedule
@@ -164,10 +159,6 @@ app.post("/", function(req, res) {
           );
         });
 
-        break;
-
-      case "/hehe":
-        Message.sendMessage(message.chat.id, "hehehe", inlineKeyboard, res);
         break;
 
       default:

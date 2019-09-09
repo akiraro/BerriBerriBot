@@ -1,12 +1,3 @@
-exports.checkRegistered = (id, registered) => {
-  console.log("CHECK REGISTEREASDASDJASLDJASKDJLKASJDLKASJDLAKSJD");
-  if (registered[id] != null) {
-    return true;
-  }
-
-  return false;
-};
-
 exports.printSchedule = cookSchedule => {
   console.log("Print schedule");
   var data = "--- COOK SCHEDULE FOR BERRI HOUSE ---\n";
@@ -17,7 +8,8 @@ exports.printSchedule = cookSchedule => {
     var dd = loopToday.getDate().toString();
     var mm = loopToday.getMonth();
     var yy = loopToday.getFullYear();
-    data = data + dd + "/" + mm + "/" + yy + " - " + cookSchedule[i] + "\n";
+    data =
+      data + dd + "/" + mm + "/" + yy + " - " + cookSchedule[i].username + "\n";
   }
 
   return data;

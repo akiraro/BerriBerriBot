@@ -89,3 +89,19 @@ exports.addCookSchedule = (user_id, username) => {
     }
   });
 };
+
+exports.getCookSchedule = cb => {
+  const queryString = "SELECT * FROM Cook";
+
+  connection.on("error", function(err) {
+    console.log("Caught this error: " + err);
+  });
+
+  connection.query(queryString, [], (err, rows, fields) => {
+    if (err) {
+      console.log(err);
+    } else {
+      cb(rows);
+    }
+  });
+};
