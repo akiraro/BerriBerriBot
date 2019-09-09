@@ -63,12 +63,12 @@ exports.getUsers = cb => {
   });
 };
 
-exports.addCookSchedule = (user_id, username, cb) => {
+exports.addCookSchedule = (user_id, username) => {
   connection.on("error", function(err) {
     console.log("Caught this error: " + err);
   });
 
-  const queryString = "SELECT COUNT(*) FROM Cook";
+  const queryString = "SELECT * FROM Cook";
   const queryString2 =
     "INSERT INTO `Cook` (sequence,user_id,username) VALUES (?,?,?)";
 
@@ -78,12 +78,11 @@ exports.addCookSchedule = (user_id, username, cb) => {
     } else {
       connection.query(
         queryString2,
-        [rows[0] + 1, user_id, username],
+        [rows.length + 1, user_id, username],
         (err2, rows2, fields2) => {
           if (err) {
             console.log(err);
           } else {
-            cb();
           }
         }
       );
