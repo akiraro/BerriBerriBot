@@ -1,27 +1,34 @@
-// import * as Message from "./message";
-// import { Work.checkRegistered, Work.printSchedule, Work.printSchedule } from "./helper.js";
-
+/**
+ * ALL NPM PACKAGES IMPORT USING ES5 SYNTAX
+ */
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 
+/**
+ * CONFIG AND CONTROLLER
+ */
 var Message = require("./message.js"); // Test
 var Work = require("./helper.js");
 var Controller = require("./controller.js");
 
 // 944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ  Telegram API
 
-var users = ["haziq", "albar", "zul", "abid"];
-var cookSchedule = [];
+/**
+ * TEMPERORY VARIABLES
+ */
 var store = {}; // to store user previous command
 var tempData = ""; // temperory data
 
-app.use(bodyParser.json()); // for parsing application/json
+/**
+ * BEGIN
+ */
+app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: true
   })
-); // for parsing application/x-www-form-urlencoded
+);
 
 //This is the route the API will call
 app.post("/", function(req, res) {
@@ -115,11 +122,6 @@ app.post("/", function(req, res) {
         );
         break;
 
-      case "/list": // Show list of all users
-        console.log("Doing /list");
-        Message.sendMessage(message.chat.id, users, null, res);
-        break;
-
       case "/schedule": // Show the cook schedule
         Controller.getCookSchedule(function(result) {
           Message.sendMessage(
@@ -168,6 +170,15 @@ app.post("/", function(req, res) {
     }
   }
 });
+
+var CronJob = require("cron").CronJob;
+console.log("Before job instantiation");
+const job = new CronJob("* * * * * *", function() {
+  const d = new Date();
+  console.log("Every second:", d);
+});
+console.log("After job instantiation");
+job.start();
 
 // Finally, start our server
 app.listen(process.env.PORT || 3000, function() {
