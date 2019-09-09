@@ -30,6 +30,10 @@ app.use(
   })
 );
 
+app.post("/shiftSchedule", function(req, res) {
+  Controller.shiftSchedule();
+});
+
 //This is the route the API will call
 app.post("/", function(req, res) {
   console.log("\nTelegram API is Running\n");
@@ -170,15 +174,6 @@ app.post("/", function(req, res) {
     }
   }
 });
-
-// var CronJob = require("cron").CronJob;
-// console.log("Before job instantiation");
-// const job = new CronJob("* * * * * *", function() {
-//   const d = new Date();
-//   console.log("Every second:", d);
-// });
-// console.log("After job instantiation");
-// job.start();
 
 // Finally, start our server
 app.listen(process.env.PORT || 3000, function() {
