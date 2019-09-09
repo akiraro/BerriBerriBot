@@ -91,7 +91,7 @@ exports.addCookSchedule = (user_id, username) => {
 };
 
 exports.getCookSchedule = cb => {
-  const queryString = "SELECT * FROM Cook";
+  const queryString = "SELECT * FROM Cook ORDER BY sequence ASC";
 
   connection.on("error", function(err) {
     console.log("Caught this error: " + err);
@@ -108,8 +108,7 @@ exports.getCookSchedule = cb => {
 
 exports.shiftSchedule = res => {
   const queryString =
-    "UPDATE Cook SET sequence = ((SELECT sequence FROM (SELECT * FROM Cook)  AS temp3 LIMIT 1) + (SELECT COUNT(*) FROM (SELECT * FROM Cook)  AS temp2))  WHERE user_id = (SELECT user_id FROM (SELECT * FROM Cook LIMIT 1)  AS temp) LIMIT 1";
-  const queryString2 = "ALTER TABLE Cook ORDER BY sequence ASC";
+    "UPDATE Cook SET sequence = ((SELECT sequence FROM (SELECT * FROM Cook)  AS temp3 LIMIT 1) + (SELECT COUNT(*) FROM (SELECT * FROM Cook)  AS temp2))  WHERE user_id = (SELECT user_id FROM (SELECT * FROM Cook LIMIT 1)  AS temp) ORDER BY sequence ASC LIMIT 1";
 
   connection.on("error", function(err) {
     console.log("Caught this error: " + err);
@@ -119,9 +118,7 @@ exports.shiftSchedule = res => {
     if (err) {
       console.log(err);
     } else {
-      connection.query(queryString2, [], (err, rows, fields) => {
-        res.end("ok");
-      });
+      res.end("ok");
     }
   });
 };
