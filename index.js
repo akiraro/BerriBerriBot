@@ -52,6 +52,8 @@ app.post("/", function(req, res) {
 
       default:
         /* Need a controller to add user to the database */
+        console.log("CBQUERY : " + cbQuery);
+        // Controller.addCookSchedule(cbQuery.data);
         Controller.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
@@ -179,6 +181,4 @@ app.post("/", function(req, res) {
 // Finally, start our server
 app.listen(process.env.PORT || 3000, function() {
   console.log("Telegram app listening on port 3000!");
-  // registered["cibai"] = "sial";
-  // console.log(registered);
 });

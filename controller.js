@@ -54,3 +54,27 @@ exports.getUsers = cb => {
     }
   });
 };
+
+exports.addCookSchedule = (user_id, username, cb) => {
+  const queryString = "SELECT COUNT(*) FROM Cook";
+  const queryString2 =
+    "INSERT INTO `Cook` (sequence,user_id,username) VALUES (?,?,?)";
+
+  connection.query(queryString, [], (err, rows, fields) => {
+    if (err) {
+      console.log(err);
+    } else {
+      connection.query(
+        queryString2,
+        [rows[0] + 1, user_id, username],
+        (err2, rows2, fields2) => {
+          if (err) {
+            console.log(err);
+          } else {
+            cb();
+          }
+        }
+      );
+    }
+  });
+};
