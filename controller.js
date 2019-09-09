@@ -28,6 +28,10 @@ exports.registerUser = (id, username, res) => {
 exports.checkRegistered = (user_id, cb) => {
   const queryString = "SELECT username FROM Users WHERE `user_id` = ?";
 
+  connection.on("error", function(err) {
+    console.log("Caught this error: " + err);
+  });
+
   connection.query(queryString, [user_id], (err, rows, fields) => {
     if (err) {
       console.log(err);
@@ -43,6 +47,10 @@ exports.checkRegistered = (user_id, cb) => {
 exports.getUsers = cb => {
   const queryString = "SELECT * FROM Users";
 
+  connection.on("error", function(err) {
+    console.log("Caught this error: " + err);
+  });
+
   connection.query(queryString, [], (err, rows, fields) => {
     if (err) {
       console.log(err);
@@ -56,6 +64,10 @@ exports.getUsers = cb => {
 };
 
 exports.addCookSchedule = (user_id, username, cb) => {
+  connection.on("error", function(err) {
+    console.log("Caught this error: " + err);
+  });
+
   const queryString = "SELECT COUNT(*) FROM Cook";
   const queryString2 =
     "INSERT INTO `Cook` (sequence,user_id,username) VALUES (?,?,?)";
