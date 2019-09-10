@@ -30,11 +30,16 @@ app.use(
   })
 );
 
+/**
+ * SHIFT SCHEDULE ROUTE FOR CRON JOB
+ */
 app.post("/shiftSchedule", function(req, res) {
   Controller.shiftSchedule(res);
 });
 
-//This is the route the API will call
+/**
+ * ROUTE FOR TELEGRAM BOT WEBHOOK
+ */
 app.post("/", function(req, res) {
   console.log("\nTelegram API is Running\n");
   console.log(req.body);

@@ -68,7 +68,7 @@ exports.addCookSchedule = (user_id, username) => {
     console.log("Caught this error: " + err);
   });
 
-  const queryString = "SELECT * FROM Cook";
+  const queryString = "SELECT * FROM Cook ORDER BY sequence DESC LIMIT 1";
   const queryString2 =
     "INSERT INTO `Cook` (sequence,user_id,username) VALUES (?,?,?)";
 
@@ -107,8 +107,9 @@ exports.getCookSchedule = cb => {
 };
 
 exports.shiftSchedule = res => {
+  //   MYSQL QUERY - Select the lowest sequence in database and add the value with +1 from last row
   const queryString =
-    "UPDATE Cook SET sequence = ((SELECT sequence FROM (SELECT * FROM Cook)  AS temp3 LIMIT 1) + (SELECT COUNT(*) FROM (SELECT * FROM Cook)  AS temp2))  WHERE user_id = (SELECT user_id FROM (SELECT * FROM Cook LIMIT 1)  AS temp) ORDER BY sequence ASC LIMIT 1";
+    "UPDATE Cook SET sequence = ((SELECT sequence FROM (SELECT * FROM Cook)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE user_id = (SELECT user_id FROM (SELECT * FROM Cook LIMIT 1)  AS temp) ORDER BY sequence ASC LIMIT 1";
 
   connection.on("error", function(err) {
     console.log("Caught this error: " + err);
