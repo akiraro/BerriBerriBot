@@ -171,8 +171,8 @@ app.post("/", function(req, res) {
             inlineKeyboard,
             res
           );
+          res.end();
         });
-
         break;
 
       default:
