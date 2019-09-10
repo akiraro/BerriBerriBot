@@ -8,7 +8,7 @@ var bodyParser = require("body-parser");
 /**
  * CONFIG AND CONTROLLER
  */
-var Message = require("./message.js"); // Test
+var Message = require("./message.js");
 var Work = require("./helper.js");
 var Controller = require("./controller.js");
 var CallbackHandler = require("./callbackhandler.js");
@@ -53,7 +53,7 @@ app.post("/", function(req, res) {
 
   // Handle call back query
   if (cbQuery != null) {
-    CallbackHandler.handler(cbQuery);
+    CallbackHandler.handler(cbQuery, res);
 
     // console.log("HANDLING CB QUERY");
     // switch (cbQuery.data) {

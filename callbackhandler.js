@@ -1,4 +1,6 @@
-exports.handler = cbQuery => {
+var Message = require("./message.js");
+
+exports.handler = (cbQuery, res) => {
   console.log("HANDLING CB QUERY");
 
   switch (cbQuery.data) {
