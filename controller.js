@@ -3,6 +3,7 @@ const config = require("./config");
 const connection = mysql.createConnection(config);
 
 exports.registerUser = (id, username, res) => {
+  connection.connect();
   const queryString =
     "INSERT INTO `Users` (`id`,`user_id`,`username`) VALUES (?,?,?)";
 
@@ -19,7 +20,7 @@ exports.registerUser = (id, username, res) => {
         res.end();
       } else {
         console.log("SUCCESS : USER REGISTERED");
-        connection.end();
+
         res.end();
       }
     }
@@ -27,6 +28,7 @@ exports.registerUser = (id, username, res) => {
 };
 
 exports.checkRegistered = (user_id, cb) => {
+  connection.connect();
   const queryString = "SELECT username FROM Users WHERE `user_id` = ?";
 
   connection.on("error", function(err) {
@@ -38,16 +40,16 @@ exports.checkRegistered = (user_id, cb) => {
       console.log(err);
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
-      connection.end();
+
       cb(true);
     } else {
-      connection.end();
       cb(false);
     }
   });
 };
 
 exports.getUsers = cb => {
+  connection.connect();
   const queryString = "SELECT * FROM Users";
 
   connection.on("error", function(err) {
@@ -57,19 +59,17 @@ exports.getUsers = cb => {
   connection.query(queryString, [], (err, rows, fields) => {
     if (err) {
       console.log(err);
-      connection.end();
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
       console.log(rows);
       cb(rows);
-      connection.end();
     } else {
-      connection.end();
     }
   });
 };
 
 exports.addCookSchedule = (user_id, username) => {
+  connection.connect();
   connection.on("error", function(err) {
     console.log("Caught this error: " + err);
   });
@@ -88,9 +88,7 @@ exports.addCookSchedule = (user_id, username) => {
         (err2, rows2, fields2) => {
           if (err) {
             console.log(err);
-            connection.end();
           } else {
-            connection.end();
           }
         }
       );
@@ -99,6 +97,7 @@ exports.addCookSchedule = (user_id, username) => {
 };
 
 exports.getCookSchedule = cb => {
+  connection.connect();
   const queryString = "SELECT * FROM Cook ORDER BY sequence ASC";
 
   connection.on("error", function(err) {
@@ -108,15 +107,14 @@ exports.getCookSchedule = cb => {
   connection.query(queryString, [], (err, rows, fields) => {
     if (err) {
       console.log(err);
-      connection.end();
     } else {
       cb(rows);
-      connection.end();
     }
   });
 };
 
 exports.shiftSchedule = res => {
+  connection.connect();
   //   MYSQL QUERY - Select the lowest sequence in database and add the value with +1 from last row
   const queryString =
     "UPDATE Cook SET sequence = ((SELECT sequence FROM (SELECT * FROM Cook)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE user_id = (SELECT user_id FROM (SELECT * FROM Cook LIMIT 1)  AS temp) ORDER BY sequence ASC LIMIT 1";
@@ -128,10 +126,8 @@ exports.shiftSchedule = res => {
   connection.query(queryString, [], (err, rows, fields) => {
     if (err) {
       console.log(err);
-      connection.end();
     } else {
       res.end("ok");
-      connection.end();
     }
   });
 };
