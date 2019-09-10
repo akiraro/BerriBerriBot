@@ -78,7 +78,7 @@ exports.addCookSchedule = (user_id, username) => {
     } else {
       connection.query(
         queryString2,
-        [rows.length + 1, user_id, username],
+        [rows[0].sequence + 1, user_id, username],
         (err2, rows2, fields2) => {
           if (err) {
             console.log(err);
