@@ -156,7 +156,7 @@ app.post("/", function(req, res) {
           for (var i = 0; i < result.length; i++) {
             inlineKeyboard[0].push({
               text: result[i].username,
-              callback_data: "A" + i
+              callback_data: "A" + result[i].username
             });
           }
 
