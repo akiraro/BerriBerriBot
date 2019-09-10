@@ -162,10 +162,7 @@ app.post("/", function(req, res) {
           inlineKeyboard.push([
             {
               text: "Done",
-              callback_data: {
-                status: "done",
-                hello: "World"
-              }
+              callback_data: "done"
             }
           ]);
           Message.sendMessage(

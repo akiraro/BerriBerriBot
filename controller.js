@@ -19,12 +19,11 @@ exports.registerUser = (id, username, res) => {
         res.end();
       } else {
         console.log("SUCCESS : USER REGISTERED");
+        connection.end();
         res.end();
       }
     }
   );
-
-  connection.end();
 };
 
 exports.checkRegistered = (user_id, cb) => {
@@ -39,12 +38,13 @@ exports.checkRegistered = (user_id, cb) => {
       console.log(err);
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
+      connection.end();
       cb(true);
     } else {
+      connection.end();
       cb(false);
     }
   });
-  connection.end();
 };
 
 exports.getUsers = cb => {
@@ -60,11 +60,12 @@ exports.getUsers = cb => {
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
       console.log(rows);
+      connection.end();
       cb(rows);
     } else {
+      connection.end();
     }
   });
-  connection.end();
 };
 
 exports.addCookSchedule = (user_id, username) => {
@@ -86,13 +87,14 @@ exports.addCookSchedule = (user_id, username) => {
         (err2, rows2, fields2) => {
           if (err) {
             console.log(err);
+            connection.end();
           } else {
+            connection.end();
           }
         }
       );
     }
   });
-  connection.end();
 };
 
 exports.getCookSchedule = cb => {
@@ -105,11 +107,12 @@ exports.getCookSchedule = cb => {
   connection.query(queryString, [], (err, rows, fields) => {
     if (err) {
       console.log(err);
+      connection.end();
     } else {
       cb(rows);
+      connection.end();
     }
   });
-  connection.end();
 };
 
 exports.shiftSchedule = res => {
@@ -124,9 +127,10 @@ exports.shiftSchedule = res => {
   connection.query(queryString, [], (err, rows, fields) => {
     if (err) {
       console.log(err);
+      connection.end();
     } else {
       res.end("ok");
+      connection.end();
     }
   });
-  connection.end();
 };
