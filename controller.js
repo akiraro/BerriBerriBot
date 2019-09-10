@@ -57,11 +57,12 @@ exports.getUsers = cb => {
   connection.query(queryString, [], (err, rows, fields) => {
     if (err) {
       console.log(err);
+      connection.end();
     } else if (rows.length != 0) {
       console.log("SUCCESS : USER FOUND");
       console.log(rows);
-      connection.end();
       cb(rows);
+      connection.end();
     } else {
       connection.end();
     }
