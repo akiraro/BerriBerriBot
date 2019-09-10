@@ -23,6 +23,8 @@ exports.registerUser = (id, username, res) => {
       }
     }
   );
+
+  connection.end();
 };
 
 exports.checkRegistered = (user_id, cb) => {
@@ -42,6 +44,7 @@ exports.checkRegistered = (user_id, cb) => {
       cb(false);
     }
   });
+  connection.end();
 };
 
 exports.getUsers = cb => {
@@ -61,6 +64,7 @@ exports.getUsers = cb => {
     } else {
     }
   });
+  connection.end();
 };
 
 exports.addCookSchedule = (user_id, username) => {
@@ -88,6 +92,7 @@ exports.addCookSchedule = (user_id, username) => {
       );
     }
   });
+  connection.end();
 };
 
 exports.getCookSchedule = cb => {
@@ -104,6 +109,7 @@ exports.getCookSchedule = cb => {
       cb(rows);
     }
   });
+  connection.end();
 };
 
 exports.shiftSchedule = res => {
@@ -122,4 +128,5 @@ exports.shiftSchedule = res => {
       res.end("ok");
     }
   });
+  connection.end();
 };

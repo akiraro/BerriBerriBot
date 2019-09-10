@@ -1,4 +1,5 @@
 var Message = require("./message.js");
+var store = {};
 
 exports.handler = (cbQuery, res) => {
   console.log("HANDLING CB QUERY");
