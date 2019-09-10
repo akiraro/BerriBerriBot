@@ -11,6 +11,7 @@ var bodyParser = require("body-parser");
 var Message = require("./message.js"); // Test
 var Work = require("./helper.js");
 var Controller = require("./controller.js");
+var CallbackHandler = require("./callbackhandler.js");
 
 // 944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ  Telegram API
 
@@ -52,40 +53,42 @@ app.post("/", function(req, res) {
 
   // Handle call back query
   if (cbQuery != null) {
-    console.log("HANDLING CB QUERY");
-    switch (cbQuery.data) {
-      case "done": //Delete message if done
-        console.log("DELETING MESSAGE");
-        Message.deleteMessage(cbQuery, res);
-        break;
+    CallbackHandler.handler(cbQuery);
 
-      default:
-        /* Need a controller to add user to the database */
+    // console.log("HANDLING CB QUERY");
+    // switch (cbQuery.data) {
+    //   case "done": //Delete message if done
+    //     console.log("DELETING MESSAGE");
+    //     Message.deleteMessage(cbQuery, res);
+    //     break;
 
-        Controller.addCookSchedule(cbQuery.from.id, cbQuery.data);
-        Controller.getUsers(function(result) {
-          var inlineKeyboard = [[]];
-          for (var i = 0; i < result.length; i++) {
-            inlineKeyboard[0].push({
-              text: result[i].username,
-              callback_data: result[i].username
-            });
-          }
-          inlineKeyboard.push([
-            {
-              text: "Done",
-              callback_data: "done"
-            }
-          ]);
-          Message.editMessage(
-            cbQuery,
-            cbQuery.data +
-              " added to the schedule. Who else will be in the cook schedule ?",
-            inlineKeyboard,
-            res
-          );
-        });
-    }
+    //   default:
+    //     /* Need a controller to add user to the database */
+
+    //     Controller.addCookSchedule(cbQuery.from.id, cbQuery.data);
+    //     Controller.getUsers(function(result) {
+    //       var inlineKeyboard = [[]];
+    //       for (var i = 0; i < result.length; i++) {
+    //         inlineKeyboard[0].push({
+    //           text: result[i].username,
+    //           callback_data: result[i].username
+    //         });
+    //       }
+    //       inlineKeyboard.push([
+    //         {
+    //           text: "Done",
+    //           callback_data: "done"
+    //         }
+    //       ]);
+    //       Message.editMessage(
+    //         cbQuery,
+    //         cbQuery.data +
+    //           " added to the schedule. Who else will be in the cook schedule ?",
+    //         inlineKeyboard,
+    //         res
+    //       );
+    //     });
+    // }
   } else {
     // Handle normal command
     if (store[message.from.id] != null) {
