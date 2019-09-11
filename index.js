@@ -180,7 +180,6 @@ app.post("/", function(req, res) {
               callback_data: "B" + result[i].username
             });
           }
-
           Message.sendMessage(
             message.chat.id,
             "Who will you swap you schedule with ?",
