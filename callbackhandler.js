@@ -37,7 +37,7 @@ exports.handler = (cbQuery, res) => {
     });
   } else if (cbQuery.data[0] === "B") {
     console.log("FOUND CB");
-    // Controller.swapCookSchedule();
+    Controller.swapCookSchedule(cbQuery.from.id, cbQuery, res);
     Message.deleteMessage(cbQuery, res);
   }
 };

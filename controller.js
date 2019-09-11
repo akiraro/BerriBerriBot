@@ -132,32 +132,48 @@ exports.shiftSchedule = res => {
   });
 };
 
-exports.swapCookSchedule = (user_id, cbQuery) => {
+exports.swapCookSchedule = (user_id, cbQuery, res) => {
   connection.connect();
-  const queryString = "SELECT sequence FROM cook WHERE user_id = ?";
-  const queryString2 = "UPDATE cook SET sequence = ? WHERE username = ?";
-  const queryString3 = "UPDATE cook SET sequence = ? WHERE username = ?";
+  const queryString = "SELECT sequence FROM cook WHERE user_id IN (?,?)";
+  const queryString2 = "UPDATE cook SET sequence = ? WHERE user_id = ?";
+  const queryString3 = "UPDATE cook SET sequence = ? WHERE user_id = ?";
 
   connection.on("error", function(err) {
     console.log("Caught this error: " + err);
   });
 
-  connection.query(queryString, [user_id], (err, rows, fields) => {
-    if (err) {
-      console.log(err);
-    } else {
-      connection.query(queryString2, [rows[0]], (err2, rows2, fields2) => {
-        if (err2) {
-          console.log(err2);
-        } else {
-          connection.query(queryString3, [], (err3, rows3, fields3) => {
-            if (err3) {
-              console.log(err3);
+  console.log("HEHEHE : " + cbQuery.data.slice(1, cbQuery.data.length));
+  connection.query(
+    queryString,
+    [user_id, cbQuery.data.slice(1, cbQuery.data.length)],
+    (err, rows, fields) => {
+      if (err) {
+        console.log(err);
+      } else {
+        connection.query(
+          queryString2,
+          [rows[0].sequence, cbQuery.data.slice(1, cbQuery.data.length)],
+          (err2, rows2, fields2) => {
+            if (err2) {
+              console.log(err2);
             } else {
+              connection.query(
+                queryString3,
+                [rows[1].sequence, user_id],
+                (err3, rows3, fields3) => {
+                  if (err3) {
+                    console.log(err3);
+                  } else {
+                    console.log("SCHEDULE SWAPPED");
+                    console.log(rows);
+                    res.end("ok");
+                  }
+                }
+              );
             }
-          });
-        }
-      });
+          }
+        );
+      }
     }
-  });
+  );
 };
