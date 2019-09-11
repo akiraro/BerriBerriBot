@@ -6,7 +6,6 @@ exports.handler = (cbQuery, res) => {
 
   if (cbQuery.data === "done") {
     //Delete message if done
-    console.log("DELETING MESSAGE");
     Message.deleteMessage(cbQuery, res);
   } else if (cbQuery.data[0] === "A") {
     /* Need a controller to add user to the database */
@@ -37,6 +36,8 @@ exports.handler = (cbQuery, res) => {
       );
     });
   } else if (cbQuery.data[0] === "B") {
-    Controller.swapCookSchedule();
+    console.log("FOUND CB");
+    // Controller.swapCookSchedule();
+    Message.deleteMessage(cbQuery, res);
   }
 };
