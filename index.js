@@ -172,6 +172,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/swapcookschedule":
+        console.log("RUNGSSDS");
         Controller.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
