@@ -131,3 +131,33 @@ exports.shiftSchedule = res => {
     }
   });
 };
+
+exports.swapCookSchedule = (user_id, cbQuery) => {
+  connection.connect();
+  const queryString = "SELECT sequence FROM cook WHERE user_id = ?";
+  const queryString2 = "UPDATE cook SET sequence = ? WHERE username = ?";
+  const queryString3 = "UPDATE cook SET sequence = ? WHERE username = ?";
+
+  connection.on("error", function(err) {
+    console.log("Caught this error: " + err);
+  });
+
+  connection.query(queryString, [user_id], (err, rows, fields) => {
+    if (err) {
+      console.log(err);
+    } else {
+      connection.query(queryString2, [rows[0]], (err2, rows2, fields2) => {
+        if (err2) {
+          console.log(err2);
+        } else {
+          connection.query(queryString3, [], (err3, rows3, fields3) => {
+            if (err3) {
+              console.log(err3);
+            } else {
+            }
+          });
+        }
+      });
+    }
+  });
+};

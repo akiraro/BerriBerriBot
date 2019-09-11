@@ -146,10 +146,6 @@ app.post("/", function(req, res) {
 
         break;
 
-      case "/shiftcookschedule": // Shift the cook schedule
-        Work.printSchedule();
-        break;
-
       case "/addschedule": // Add user to the cook schedule -> Wait user input
         Controller.getUsers(function(result) {
           var inlineKeyboard = [[]];
@@ -175,15 +171,33 @@ app.post("/", function(req, res) {
         });
         break;
 
+      case "/swapCookSchedule":
+        Controller.getUsers(function(result) {
+          var inlineKeyboard = [[]];
+          for (var i = 0; i < result.length; i++) {
+            inlineKeyboard[0].push({
+              text: result[i].username,
+              callback_data: "B" + result[i].username
+            });
+          }
+          Message.sendMessage(
+            message.chat.id,
+            "Who will you swap you schedule with ?",
+            inlineKeyboard,
+            res
+          );
+          res.end();
+        });
+        break;
+
       default:
         // End session if command invalid
         return res.end();
-        break;
     }
   }
 });
 
 // Finally, start our server
 app.listen(process.env.PORT || 3000, function() {
-  console.log("Telegram app listening on port 3000!");
+  console.log("Telegram bot listening on port 3000!");
 });

@@ -36,5 +36,7 @@ exports.handler = (cbQuery, res) => {
         res
       );
     });
+  } else if (cbQuery.data[0] === "B") {
+    Controller.swapCookSchedule();
   }
 };
