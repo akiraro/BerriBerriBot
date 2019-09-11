@@ -171,7 +171,7 @@ app.post("/", function(req, res) {
         });
         break;
 
-      case "/swapCookSchedule":
+      case "/swapcookschedule":
         Controller.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
