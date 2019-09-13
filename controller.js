@@ -20,7 +20,6 @@ exports.registerUser = (id, username, res) => {
         res.end();
       } else {
         console.log("SUCCESS : USER REGISTERED");
-
         res.end();
       }
     }
@@ -68,7 +67,7 @@ exports.getUsers = cb => {
   });
 };
 
-exports.addCookSchedule = (user_id, username) => {
+exports.addCookSchedule = (user_id, username, res) => {
   connection.connect();
   connection.on("error", function(err) {
     console.log("Caught this error: " + err);
@@ -89,6 +88,7 @@ exports.addCookSchedule = (user_id, username) => {
           if (err) {
             console.log(err);
           } else {
+            res.end("ok");
           }
         }
       );
@@ -141,8 +141,6 @@ exports.swapCookSchedule = (user_id, cbQuery, res) => {
   connection.on("error", function(err) {
     console.log("Caught this error: " + err);
   });
-
-  console.log("HEHEHE : " + cbQuery.data.slice(1, cbQuery.data.length));
   connection.query(
     queryString,
     [user_id, cbQuery.data.slice(1, cbQuery.data.length)],
@@ -164,8 +162,6 @@ exports.swapCookSchedule = (user_id, cbQuery, res) => {
                   if (err3) {
                     console.log(err3);
                   } else {
-                    console.log("SCHEDULE SWAPPED");
-                    console.log(rows);
                     res.end("ok");
                   }
                 }
@@ -176,4 +172,59 @@ exports.swapCookSchedule = (user_id, cbQuery, res) => {
       }
     }
   );
+};
+
+exports.addGroceryList = (item, remark, res) => {
+  connection.connect();
+  connection.on("error", function(err) {
+    console.log("Caught this error: " + err);
+  });
+
+  const queryString = "INSERT INTO `grocery` (id,item,remark) VALUES (?,?,?)";
+
+  connection.query(
+    queryString,
+    ["DEFAULT", item, remark],
+    (err, rows, fields) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.end("ok");
+      }
+    }
+  );
+};
+
+exports.resetGrocery = cb => {
+  connection.connect();
+  connection.on("error", function(err) {
+    console.log("Caught this error: " + err);
+  });
+
+  const queryString = "DELETE FROM `grocery`";
+
+  connection.query(queryString, [], (err, rows, fields) => {
+    if (err) {
+      console.log(err);
+    } else {
+      cb();
+    }
+  });
+};
+
+exports.getGrocery = cb => {
+  connection.connect();
+  connection.on("error", function(err) {
+    console.log("Caught this error: " + err);
+  });
+
+  const queryString = "SELECT * FROM `grocery`";
+
+  connection.query(queryString, [], (err, rows, fields) => {
+    if (err) {
+      console.log(err);
+    } else {
+      cb(rows);
+    }
+  });
 };

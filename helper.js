@@ -14,8 +14,3 @@ exports.printSchedule = cookSchedule => {
 
   return data;
 };
-
-exports.shiftCookSchedule = () => {
-  var firstElement = users.shift();
-  users.push(firstElement);
-};

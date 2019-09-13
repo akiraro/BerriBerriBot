@@ -11,7 +11,8 @@ exports.handler = (cbQuery, res) => {
     /* Need a controller to add user to the database */
     Controller.addCookSchedule(
       cbQuery.from.id,
-      cbQuery.data.slice(1, cbQuery.data.length)
+      cbQuery.data.slice(1, cbQuery.data.length),
+      res
     );
     Controller.getUsers(function(result) {
       var inlineKeyboard = [[]];
