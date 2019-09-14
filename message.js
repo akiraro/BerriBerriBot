@@ -8,7 +8,7 @@ exports.sendMessage = (chat_id, text, keyboard, res) => {
     bodyReq = {
       chat_id: chat_id,
       text: text,
-      reply_markup: { inline_keyboard: keyboard }
+      reply_markup: keyboard
     };
   }
 
@@ -32,7 +32,7 @@ exports.editMessage = (cbQuery, text, keyboard, res) => {
     chat_id: cbQuery.message.chat.id,
     message_id: cbQuery.message.message_id,
     text: text,
-    reply_markup: { inline_keyboard: keyboard }
+    reply_markup: keyboard
   };
 
   axios

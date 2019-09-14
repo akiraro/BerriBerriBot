@@ -1,4 +1,5 @@
 let config = {
+  connectionLimit: 10,
   host: process.env.RDS_HOST || "us-cdbr-iron-east-02.cleardb.net",
   port: process.env.RDS_PORT || 3306,
   user: process.env.RDS_USER || "bf06aff5ce1be3",

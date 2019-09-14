@@ -25,7 +25,6 @@ var CallbackHandler = require("./callbackhandler.js");
  * index 3 - Remark
  */
 var store = {}; // to store user previous command
-
 var tempData = []; // temperory data
 
 /**
@@ -46,10 +45,17 @@ app.post("/shiftSchedule", function(req, res) {
 });
 
 /**
+ * SEND REMINDER
+ */
+app.post("/cookReminder", function(req, res) {
+  Controller.cookReminder(res);
+});
+
+/**
  * ROUTE FOR TELEGRAM BOT WEBHOOK
  */
 app.post("/", function(req, res) {
-  console.log("\nTelegram API is Running\n");
+  console.log("\nNEW REQUEST\n");
   console.log(req.body);
 
   if (req.body.message != null) {
@@ -85,20 +91,32 @@ app.post("/", function(req, res) {
 
     // Switch case to identify the user command
     switch (message.text) {
+      case "/init":
+        console.log("DOING INIT");
+        Controller.initialize(res, function() {
+          Message.sendMessage(
+            message.chat.id,
+            "Initialization done",
+            { remove_keyboard: true },
+            res
+          );
+        });
+        break;
+
       case "/register": // User register -> Wait user input
         Controller.checkRegistered(message.from.id, function(result) {
           if (result === true) {
             Message.sendMessage(
               message.chat.id,
               "Uh oh, dont be dumb. You already register",
-              null,
+              { remove_keyboard: true },
               res
             );
           } else {
             Message.sendMessage(
               message.chat.id,
               "Please enter your name",
-              null,
+              { remove_keyboard: true },
               res
             );
             store[message.from.id] = "/register";
@@ -112,7 +130,7 @@ app.post("/", function(req, res) {
         Message.sendMessage(
           message.chat.id,
           "You have been registered",
-          null,
+          { remove_keyboard: true },
           res
         );
         break;
@@ -122,7 +140,7 @@ app.post("/", function(req, res) {
           Message.sendMessage(
             message.chat.id,
             Work.printSchedule(result),
-            null,
+            { remove_keyboard: true },
             res
           );
         });
@@ -147,7 +165,7 @@ app.post("/", function(req, res) {
           Message.sendMessage(
             message.chat.id,
             "Who will be in the cook schedule ?",
-            inlineKeyboard,
+            { inline_keyboard: inlineKeyboard },
             res
           );
           res.end();
@@ -166,7 +184,7 @@ app.post("/", function(req, res) {
           Message.sendMessage(
             message.chat.id,
             "Who will you swap you schedule with ?",
-            inlineKeyboard,
+            { inline_keyboard: inlineKeyboard },
             res
           );
           res.end();
@@ -177,7 +195,7 @@ app.post("/", function(req, res) {
         Message.sendMessage(
           message.chat.id,
           "What is the name of the item ?",
-          null,
+          { remove_keyboard: true },
           res
         );
         store[message.from.id] = "/addgrocerylist";
@@ -190,7 +208,7 @@ app.post("/", function(req, res) {
         Message.sendMessage(
           message.chat.id,
           "What is the remark for the item ?",
-          null,
+          { remove_keyboard: true },
           res
         );
         res.end();
@@ -201,14 +219,14 @@ app.post("/", function(req, res) {
           Message.sendMessage(
             message.chat.id,
             "Grocery list have been resetted",
-            null,
+            { remove_keyboard: true },
             res
           );
         });
         res.end();
         break;
 
-      case "/getgrocerylist":
+      case "/grocerylist":
         Controller.getGrocery(function(result) {
           var text = "Grocery List :\n";
           for (var i = 0; i < result.length; i++) {

@@ -8,7 +8,6 @@ exports.handler = (cbQuery, res) => {
     //Delete message if done
     Message.deleteMessage(cbQuery, res);
   } else if (cbQuery.data[0] === "A") {
-    /* Need a controller to add user to the database */
     Controller.addCookSchedule(
       cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
@@ -32,13 +31,26 @@ exports.handler = (cbQuery, res) => {
         cbQuery,
         cbQuery.data.slice(1, cbQuery.data.length) +
           " added to the schedule. Who else will be in the cook schedule ?",
-        inlineKeyboard,
+        { inline_keyboard: inlineKeyboard },
         res
       );
     });
   } else if (cbQuery.data[0] === "B") {
-    console.log("FOUND CB");
     Controller.swapCookSchedule(cbQuery.from.id, cbQuery, res);
     Message.deleteMessage(cbQuery, res);
+  } else if (cbQuery.data[0] === "C") {
+    if (cbQuery.data.slice(1, cbQuery.data.length) == "Yes") {
+      Message.deleteMessage(cbQuery, res);
+      Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
+      Controller.shiftSchedule(res);
+    } else {
+      Message.deleteMessage(cbQuery, res);
+      Message.sendMessage(
+        cbQuery.message.chat.id,
+        "I will remind you again in an hour !",
+        null,
+        res
+      );
+    }
   }
 };
