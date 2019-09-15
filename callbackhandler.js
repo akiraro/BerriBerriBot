@@ -52,5 +52,89 @@ exports.handler = (cbQuery, res) => {
         res
       );
     }
+  } else if (cbQuery.data[0] === "D") {
+    Controller.addDishSchedule(
+      cbQuery.from.id,
+      cbQuery.data.slice(1, cbQuery.data.length),
+      res
+    );
+    Controller.getUsers(function(result) {
+      var inlineKeyboard = [[]];
+      for (var i = 0; i < result.length; i++) {
+        inlineKeyboard[0].push({
+          text: result[i].username,
+          callback_data: "D" + result[i].username
+        });
+      }
+      inlineKeyboard.push([
+        {
+          text: "Done",
+          callback_data: "done"
+        }
+      ]);
+      Message.editMessage(
+        cbQuery,
+        cbQuery.data.slice(1, cbQuery.data.length) +
+          " added to the schedule. Who else will be in the dish schedule ?",
+        { inline_keyboard: inlineKeyboard },
+        res
+      );
+    });
+  } else if (cbQuery.data[0] === "E") {
+    Controller.addTrashSchedule(
+      cbQuery.from.id,
+      cbQuery.data.slice(1, cbQuery.data.length),
+      res
+    );
+    Controller.getUsers(function(result) {
+      var inlineKeyboard = [[]];
+      for (var i = 0; i < result.length; i++) {
+        inlineKeyboard[0].push({
+          text: result[i].username,
+          callback_data: "E" + result[i].username
+        });
+      }
+      inlineKeyboard.push([
+        {
+          text: "Done",
+          callback_data: "done"
+        }
+      ]);
+      Message.editMessage(
+        cbQuery,
+        cbQuery.data.slice(1, cbQuery.data.length) +
+          " added to the schedule. Who else will be in the trash schedule ?",
+        { inline_keyboard: inlineKeyboard },
+        res
+      );
+    });
+  } else if (cbQuery.data[0] === "F") {
+    Controller.addCleanSchedule(
+      cbQuery.from.id,
+      cbQuery.data.slice(1, cbQuery.data.length),
+      res
+    );
+    Controller.getUsers(function(result) {
+      var inlineKeyboard = [[]];
+      for (var i = 0; i < result.length; i++) {
+        inlineKeyboard[0].push({
+          text: result[i].username,
+          callback_data: "F" + result[i].username
+        });
+      }
+      inlineKeyboard.push([
+        {
+          text: "Done",
+          callback_data: "done"
+        }
+      ]);
+      Message.editMessage(
+        cbQuery,
+        cbQuery.data.slice(1, cbQuery.data.length) +
+          " added to the schedule. Who else will be in the clean schedule ?",
+        { inline_keyboard: inlineKeyboard },
+        res
+      );
+    });
   }
 };

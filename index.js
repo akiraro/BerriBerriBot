@@ -147,7 +147,7 @@ app.post("/", function(req, res) {
 
         break;
 
-      case "/addschedule": // Add user to the cook schedule -> Wait user input
+      case "/addcookschedule": // Add user to the cook schedule -> Wait user input
         Controller.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
@@ -165,6 +165,81 @@ app.post("/", function(req, res) {
           Message.sendMessage(
             message.chat.id,
             "Who will be in the cook schedule ?",
+            { inline_keyboard: inlineKeyboard },
+            res
+          );
+          res.end();
+        });
+        break;
+
+      case "/adddishschedule":
+        Controller.getUsers(function(result) {
+          var inlineKeyboard = [[]];
+          for (var i = 0; i < result.length; i++) {
+            inlineKeyboard[0].push({
+              text: result[i].username,
+              callback_data: "D" + result[i].username
+            });
+          }
+          inlineKeyboard.push([
+            {
+              text: "Done",
+              callback_data: "done"
+            }
+          ]);
+          Message.sendMessage(
+            message.chat.id,
+            "Who will be in the dish schedule ?",
+            { inline_keyboard: inlineKeyboard },
+            res
+          );
+          res.end();
+        });
+        break;
+
+      case "/addtrashschedule":
+        Controller.getUsers(function(result) {
+          var inlineKeyboard = [[]];
+          for (var i = 0; i < result.length; i++) {
+            inlineKeyboard[0].push({
+              text: result[i].username,
+              callback_data: "E" + result[i].username
+            });
+          }
+          inlineKeyboard.push([
+            {
+              text: "Done",
+              callback_data: "done"
+            }
+          ]);
+          Message.sendMessage(
+            message.chat.id,
+            "Who will be in the trash schedule ?",
+            { inline_keyboard: inlineKeyboard },
+            res
+          );
+          res.end();
+        });
+        break;
+
+      case "/addcleanschedule":
+        Controller.getUsers(function(result) {
+          var inlineKeyboard = [[]];
+          for (var i = 0; i < result.length; i++) {
+            inlineKeyboard[0].push({
+              text: result[i].username,
+              callback_data: "F" + result[i].username
+            });
+          }
+          inlineKeyboard.push([
+            {
+              text: "Done",
+              callback_data: "done"
+            }
+          ]);
+          Message.sendMessage(
+            message.chat.id,
+            "Who will be in the clean schedule ?",
             { inline_keyboard: inlineKeyboard },
             res
           );

@@ -120,6 +120,154 @@ exports.addCookSchedule = (user_id, username, res) => {
     connection.query(queryString, [], (err, rows, fields) => {
       if (err) {
         throw err;
+      } else if (rows.length == 0) {
+        connection.query(
+          queryString2,
+          [1, user_id, username],
+          (err2, rows2, fields2) => {
+            if (err) {
+              console.log(err);
+            } else {
+              connection.release();
+              res.end("ok");
+            }
+          }
+        );
+      } else {
+        connection.query(
+          queryString2,
+          [rows[0].sequence + 1, user_id, username],
+          (err2, rows2, fields2) => {
+            if (err) {
+              console.log(err);
+            } else {
+              connection.release();
+              res.end("ok");
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+/**
+ * Add user to dish schedule database
+ */
+exports.addDishSchedule = (user_id, username, res) => {
+  const queryString = "SELECT * FROM dish ORDER BY sequence DESC LIMIT 1";
+  const queryString2 =
+    "INSERT INTO `dish` (sequence,user_id,username) VALUES (?,?,?)";
+
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+
+    connection.query(queryString, [], (err, rows, fields) => {
+      if (err) {
+        throw err;
+      } else if (rows.length == 0) {
+        connection.query(
+          queryString2,
+          [1, user_id, username],
+          (err2, rows2, fields2) => {
+            if (err) {
+              console.log(err);
+            } else {
+              connection.release();
+              res.end("ok");
+            }
+          }
+        );
+      } else {
+        connection.query(
+          queryString2,
+          [rows[0].sequence + 1, user_id, username],
+          (err2, rows2, fields2) => {
+            if (err) {
+              console.log(err);
+            } else {
+              connection.release();
+              res.end("ok");
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+/**
+ * Add user to trash schedule database
+ */
+exports.addTrashSchedule = (user_id, username, res) => {
+  const queryString = "SELECT * FROM trash ORDER BY sequence DESC LIMIT 1";
+  const queryString2 =
+    "INSERT INTO `trash` (sequence,user_id,username) VALUES (?,?,?)";
+
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+
+    connection.query(queryString, [], (err, rows, fields) => {
+      if (err) {
+        throw err;
+      } else if (rows.length == 0) {
+        connection.query(
+          queryString2,
+          [1, user_id, username],
+          (err2, rows2, fields2) => {
+            if (err) {
+              console.log(err);
+            } else {
+              connection.release();
+              res.end("ok");
+            }
+          }
+        );
+      } else {
+        connection.query(
+          queryString2,
+          [rows[0].sequence + 1, user_id, username],
+          (err2, rows2, fields2) => {
+            if (err) {
+              console.log(err);
+            } else {
+              connection.release();
+              res.end("ok");
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+/**
+ * Add user to clean schedule database
+ */
+exports.addCleanSchedule = (user_id, username, res) => {
+  const queryString = "SELECT * FROM clean ORDER BY sequence DESC LIMIT 1";
+  const queryString2 =
+    "INSERT INTO `clean` (sequence,user_id,username) VALUES (?,?,?)";
+
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+
+    connection.query(queryString, [], (err, rows, fields) => {
+      if (err) {
+        throw err;
+      } else if (rows.length == 0) {
+        connection.query(
+          queryString2,
+          [1, user_id, username],
+          (err2, rows2, fields2) => {
+            if (err) {
+              console.log(err);
+            } else {
+              connection.release();
+              res.end("ok");
+            }
+          }
+        );
       } else {
         connection.query(
           queryString2,
