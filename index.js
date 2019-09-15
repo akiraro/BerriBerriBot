@@ -10,7 +10,11 @@ var bodyParser = require("body-parser");
  */
 var Message = require("./message.js");
 var Work = require("./helper.js");
-var Controller = require("./controller.js");
+var scheduleControllers = require("./controllers/schedule.js");
+var userControllers = require("./controllers/user.js");
+var initControllers = require("./controllers/initialize.js");
+var groceryControllers = require("./controllers/grocery.js");
+var cronControllers = require("./controllers/cron.js");
 var CallbackHandler = require("./callbackhandler.js");
 
 // 944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ  Telegram API
@@ -41,14 +45,14 @@ app.use(
  * SHIFT SCHEDULE ROUTE FOR CRON JOB
  */
 app.post("/shiftSchedule", function(req, res) {
-  Controller.shiftSchedule(res);
+  cronControllers.shiftSchedule(res);
 });
 
 /**
  * SEND REMINDER
  */
 app.post("/cookReminder", function(req, res) {
-  Controller.cookReminder(res);
+  cronControllers.cookReminder(res);
 });
 
 /**
@@ -82,7 +86,13 @@ app.post("/", function(req, res) {
           message.text = "/addgrocerylist2";
           break;
         case "/addgrocerylist2":
-          Controller.addGroceryList(tempData[0], message.text, res);
+          groceryControllers.addGroceryList(tempData[0], message.text, res);
+          Message.sendMessage(
+            message.chat.id,
+            "Item added into grocery list",
+            { remove_keyboard: true },
+            res
+          );
           store[message.from.id] = null; //Clearing user previous command
           tempData = []; //Clearing tempData
           break;
@@ -92,8 +102,7 @@ app.post("/", function(req, res) {
     // Switch case to identify the user command
     switch (message.text) {
       case "/init":
-        console.log("DOING INIT");
-        Controller.initialize(res, function() {
+        initControllers.initialize(res, function() {
           Message.sendMessage(
             message.chat.id,
             "Initialization done",
@@ -104,7 +113,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/register": // User register -> Wait user input
-        Controller.checkRegistered(message.from.id, function(result) {
+        userControllers.checkRegistered(message.from.id, function(result) {
           if (result === true) {
             Message.sendMessage(
               message.chat.id,
@@ -126,7 +135,7 @@ app.post("/", function(req, res) {
 
       case "/register2": // Next step user registration
         store[message.from.id] = null;
-        Controller.registerUser(message.from.id, tempData, res);
+        userControllers.registerUser(message.from.id, tempData, res);
         Message.sendMessage(
           message.chat.id,
           "You have been registered",
@@ -136,7 +145,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/schedule": // Show the cook schedule
-        Controller.getCookSchedule(function(result) {
+        scheduleControllers.getCookSchedule(function(result) {
           Message.sendMessage(
             message.chat.id,
             Work.printSchedule(result),
@@ -148,7 +157,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/addcookschedule": // Add user to the cook schedule -> Wait user input
-        Controller.getUsers(function(result) {
+        userControllers.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
             inlineKeyboard[0].push({
@@ -173,7 +182,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/adddishschedule":
-        Controller.getUsers(function(result) {
+        userControllers.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
             inlineKeyboard[0].push({
@@ -198,7 +207,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/addtrashschedule":
-        Controller.getUsers(function(result) {
+        userControllers.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
             inlineKeyboard[0].push({
@@ -223,7 +232,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/addcleanschedule":
-        Controller.getUsers(function(result) {
+        userControllers.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
             inlineKeyboard[0].push({
@@ -248,7 +257,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/swapcookschedule": // Swap schedule with different user
-        Controller.getUsers(function(result) {
+        userControllers.getUsers(function(result) {
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
             inlineKeyboard[0].push({
@@ -290,7 +299,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/resetgrocerylist":
-        Controller.resetGrocery(function() {
+        groceryControllers.resetGrocery(function() {
           Message.sendMessage(
             message.chat.id,
             "Grocery list have been resetted",
@@ -302,7 +311,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/grocerylist":
-        Controller.getGrocery(function(result) {
+        groceryControllers.getGrocery(function(result) {
           var text = "Grocery List :\n";
           for (var i = 0; i < result.length; i++) {
             text =

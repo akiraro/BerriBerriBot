@@ -1,0 +1,18 @@
+## Author / Developer Note ##
+
+Schedule :
+Cook - Everyday
+Clean - Once a week
+Dish - Everyday
+Trash - Monday and Friday
+
+
+Init - Add first person to the cron
+
+
+
+Steps:
+1.Register
+2.Add Schedule
+3.Init
+4.Fully automated

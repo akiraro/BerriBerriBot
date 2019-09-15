@@ -1,5 +1,7 @@
 var Message = require("./message.js");
-var Controller = require("./controller.js");
+var scheduleControllers = require("./controllers/schedule.js");
+var cronControllers = require("./controllers/cron.js");
+var userControllers = require("./controllers/user.js");
 
 exports.handler = (cbQuery, res) => {
   console.log("HANDLING CB QUERY");
@@ -8,12 +10,12 @@ exports.handler = (cbQuery, res) => {
     //Delete message if done
     Message.deleteMessage(cbQuery, res);
   } else if (cbQuery.data[0] === "A") {
-    Controller.addCookSchedule(
+    scheduleControllers.addCookSchedule(
       cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
       res
     );
-    Controller.getUsers(function(result) {
+    userControllers.getUsers(function(result) {
       var inlineKeyboard = [[]];
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
@@ -36,13 +38,13 @@ exports.handler = (cbQuery, res) => {
       );
     });
   } else if (cbQuery.data[0] === "B") {
-    Controller.swapCookSchedule(cbQuery.from.id, cbQuery, res);
+    scheduleControllers.swapCookSchedule(cbQuery.from.id, cbQuery, res);
     Message.deleteMessage(cbQuery, res);
   } else if (cbQuery.data[0] === "C") {
     if (cbQuery.data.slice(1, cbQuery.data.length) == "Yes") {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
-      Controller.shiftSchedule(res);
+      cronControllers.shiftSchedule(res);
     } else {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
@@ -53,12 +55,12 @@ exports.handler = (cbQuery, res) => {
       );
     }
   } else if (cbQuery.data[0] === "D") {
-    Controller.addDishSchedule(
+    scheduleControllers.addDishSchedule(
       cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
       res
     );
-    Controller.getUsers(function(result) {
+    userControllers.getUsers(function(result) {
       var inlineKeyboard = [[]];
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
@@ -81,12 +83,12 @@ exports.handler = (cbQuery, res) => {
       );
     });
   } else if (cbQuery.data[0] === "E") {
-    Controller.addTrashSchedule(
+    scheduleControllers.addTrashSchedule(
       cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
       res
     );
-    Controller.getUsers(function(result) {
+    userControllers.getUsers(function(result) {
       var inlineKeyboard = [[]];
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
@@ -109,12 +111,12 @@ exports.handler = (cbQuery, res) => {
       );
     });
   } else if (cbQuery.data[0] === "F") {
-    Controller.addCleanSchedule(
+    scheduleControllers.addCleanSchedule(
       cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
       res
     );
-    Controller.getUsers(function(result) {
+    userControllers.getUsers(function(result) {
       var inlineKeyboard = [[]];
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
