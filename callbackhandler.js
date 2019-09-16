@@ -38,13 +38,64 @@ exports.handler = (cbQuery, res) => {
       );
     });
   } else if (cbQuery.data[0] === "B") {
+    //Swap schedule CB
     scheduleControllers.swapCookSchedule(cbQuery.from.id, cbQuery, res);
     Message.deleteMessage(cbQuery, res);
   } else if (cbQuery.data[0] === "C") {
+    //Reminder CB -> Cook
     if (cbQuery.data.slice(1, cbQuery.data.length) == "Yes") {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
-      cronControllers.shiftSchedule(res);
+      cronControllers.changeStatus("cook", res);
+      // cronControllers.shiftCookSchedule(res);
+    } else {
+      Message.deleteMessage(cbQuery, res);
+      Message.sendMessage(
+        cbQuery.message.chat.id,
+        "I will remind you again in an hour !",
+        null,
+        res
+      );
+    }
+  } else if (cbQuery.data[0] === "V") {
+    //Reminder CB -> Dish
+    if (cbQuery.data.slice(1, cbQuery.data.length) == "Yes") {
+      Message.deleteMessage(cbQuery, res);
+      Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
+      cronControllers.changeStatus("dish", res);
+      // cronControllers.shiftCookSchedule(res);
+    } else {
+      Message.deleteMessage(cbQuery, res);
+      Message.sendMessage(
+        cbQuery.message.chat.id,
+        "I will remind you again in an hour !",
+        null,
+        res
+      );
+    }
+  } else if (cbQuery.data[0] === "X") {
+    //Reminder CB -> Trash
+    if (cbQuery.data.slice(1, cbQuery.data.length) == "Yes") {
+      Message.deleteMessage(cbQuery, res);
+      Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
+      cronControllers.changeStatus("trash", res);
+      // cronControllers.shiftTrashSchedule(res);
+    } else {
+      Message.deleteMessage(cbQuery, res);
+      Message.sendMessage(
+        cbQuery.message.chat.id,
+        "I will remind you again in an hour !",
+        null,
+        res
+      );
+    }
+  } else if (cbQuery.data[0] === "Y") {
+    //Reminder CB -> Clean
+    if (cbQuery.data.slice(1, cbQuery.data.length) == "Yes") {
+      Message.deleteMessage(cbQuery, res);
+      Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
+      cronControllers.changeStatus("clean", res);
+      // cronControllers.shiftCleanSchedule(res);
     } else {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
@@ -55,6 +106,7 @@ exports.handler = (cbQuery, res) => {
       );
     }
   } else if (cbQuery.data[0] === "D") {
+    //Add dish schedule
     scheduleControllers.addDishSchedule(
       cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
@@ -65,7 +117,7 @@ exports.handler = (cbQuery, res) => {
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
           text: result[i].username,
-          callback_data: "D" + result[i].username
+          callback_data: "A" + result[i].username
         });
       }
       inlineKeyboard.push([
@@ -83,6 +135,7 @@ exports.handler = (cbQuery, res) => {
       );
     });
   } else if (cbQuery.data[0] === "E") {
+    //Add trash schedule
     scheduleControllers.addTrashSchedule(
       cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
@@ -93,7 +146,7 @@ exports.handler = (cbQuery, res) => {
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
           text: result[i].username,
-          callback_data: "E" + result[i].username
+          callback_data: "A" + result[i].username
         });
       }
       inlineKeyboard.push([
@@ -111,6 +164,7 @@ exports.handler = (cbQuery, res) => {
       );
     });
   } else if (cbQuery.data[0] === "F") {
+    //Add clean schedule
     scheduleControllers.addCleanSchedule(
       cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
@@ -121,7 +175,7 @@ exports.handler = (cbQuery, res) => {
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
           text: result[i].username,
-          callback_data: "F" + result[i].username
+          callback_data: "A" + result[i].username
         });
       }
       inlineKeyboard.push([

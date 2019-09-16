@@ -29,7 +29,7 @@ var CallbackHandler = require("./callbackhandler.js");
  * index 3 - Remark
  */
 var store = {}; // to store user previous command
-var tempData = []; // temperory data
+var tempData = {}; // temperory data
 
 /**
  * BEGIN
@@ -42,25 +42,19 @@ app.use(
 );
 
 /**
- * SHIFT SCHEDULE ROUTE FOR CRON JOB
- */
-app.post("/shiftSchedule", function(req, res) {
-  cronControllers.shiftSchedule(res);
-});
-
-/**
  * SEND REMINDER
  */
-app.post("/cookReminder", function(req, res) {
-  cronControllers.cookReminder(res);
+app.post("/sendReminder", function(req, res) {
+  cronControllers.sendReminder(res);
 });
 
 /**
  * ROUTE FOR TELEGRAM BOT WEBHOOK
  */
 app.post("/", function(req, res) {
-  console.log("\nNEW REQUEST\n");
-  console.log(req.body);
+  console.log("\nNEW REQUEST");
+  console.log("Request from user_id : ");
+  console.log(req.body.message.from.id);
 
   if (req.body.message != null) {
     var message = req.body.message;
@@ -71,22 +65,28 @@ app.post("/", function(req, res) {
   // Handle call back query
   if (cbQuery != null) {
     CallbackHandler.handler(cbQuery, res);
-    tempData = [];
+    tempData = {};
   } else {
     // Handle normal command
     if (store[message.from.id] != null) {
       // Check if previous command from user
       switch (store[message.from.id]) {
         case "/register":
-          tempData.push(message.text);
+          tempData[message.from.id] = [message.text];
+          // tempData.push(message.text);
           message.text = "/register2";
           break;
         case "/addgrocerylist":
-          tempData.push(message.text);
+          tempData[message.from.id] = [message.text];
+          // tempData.push(message.text);
           message.text = "/addgrocerylist2";
           break;
         case "/addgrocerylist2":
-          groceryControllers.addGroceryList(tempData[0], message.text, res);
+          groceryControllers.addGroceryList(
+            tempData[message.from.id][0],
+            message.text,
+            res
+          );
           Message.sendMessage(
             message.chat.id,
             "Item added into grocery list",
@@ -94,7 +94,7 @@ app.post("/", function(req, res) {
             res
           );
           store[message.from.id] = null; //Clearing user previous command
-          tempData = []; //Clearing tempData
+          tempData[message.from.id] = []; //Clearing tempData
           break;
       }
     }
@@ -135,7 +135,11 @@ app.post("/", function(req, res) {
 
       case "/register2": // Next step user registration
         store[message.from.id] = null;
-        userControllers.registerUser(message.from.id, tempData, res);
+        userControllers.registerUser(
+          message.from.id,
+          tempData[message.from.id][0],
+          res
+        );
         Message.sendMessage(
           message.chat.id,
           "You have been registered",
@@ -326,6 +330,14 @@ app.post("/", function(req, res) {
           Message.sendMessage(message.chat.id, text, null, res);
         });
         res.end();
+        break;
+
+      case "/status":
+        scheduleControllers.getStatus(function(result) {
+          Message.sendMessage(message.chat.id, result, null, res);
+          res.end();
+        });
+
         break;
 
       default:
