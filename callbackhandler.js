@@ -52,7 +52,7 @@ exports.handler = (cbQuery, res) => {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
         cbQuery.message.chat.id,
-        "I will remind you again in an hour !",
+        "I will remind you again in an hour \u{23F1} !",
         null,
         res
       );
@@ -68,7 +68,7 @@ exports.handler = (cbQuery, res) => {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
         cbQuery.message.chat.id,
-        "I will remind you again in an hour !",
+        "I will remind you again in an hour \u{23F1} !",
         null,
         res
       );
@@ -84,7 +84,7 @@ exports.handler = (cbQuery, res) => {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
         cbQuery.message.chat.id,
-        "I will remind you again in an hour !",
+        "I will remind you again in an hour \u{23F1} !",
         null,
         res
       );
@@ -100,7 +100,7 @@ exports.handler = (cbQuery, res) => {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
         cbQuery.message.chat.id,
-        "I will remind you again in an hour !",
+        "I will remind you again in an hour \u{23F1} !",
         null,
         res
       );
@@ -198,11 +198,14 @@ exports.handler = (cbQuery, res) => {
     scheduleControllers.getCookSchedule(function(result) {
       var text = "";
       var schedule = cronControllers.generateScheduleDate(result);
-      var inlineKeyboard = [[]];
+      var keyVal = "003";
+      var inlineKeyboard = [[], [], []];
       for (var i = 0; i < result.length; i++) {
         text = text + schedule[i];
-        inlineKeyboard[0].push({
-          text: i + 1,
+        inlineKeyboard[~~(i / 3)].push({
+          text:
+            String.fromCharCode(parseInt(keyVal + (i + 1), 16)) +
+            String.fromCharCode(parseInt("20E3", 16)),
           callback_data: "H" + (i + 1) + cbQuery.data[1]
         });
       }

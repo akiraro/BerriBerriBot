@@ -12,7 +12,7 @@ exports.initialize = (res, cb) => {
   const queryString3 = "SELECT * FROM `trash` ORDER BY sequence ASC LIMIT 1";
   const queryString4 = "SELECT * FROM `dish` ORDER BY sequence ASC LIMIT 1";
   const queryStringXX =
-    "INSERT INTO `cron` (`id`,`user_id`,`job`,`status`) VALUES (?,?,?,?)";
+    "INSERT INTO `cron` (`id`,`user_id`,`username`,`job`,`status`) VALUES (?,?,?,?,?)";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -22,7 +22,7 @@ exports.initialize = (res, cb) => {
       } else if (rows.length != 0) {
         connection.query(
           queryStringXX,
-          ["DEFAULT", rows[0].user_id, "cook", 0],
+          ["DEFAULT", rows[0].user_id, rows[0].username, "cook", 0],
           (errXX, rowsXX, fieldsXX) => {
             if (errXX) {
               console.log(errXX);
@@ -45,7 +45,7 @@ exports.initialize = (res, cb) => {
       } else if (rows.length != 0) {
         connection.query(
           queryStringXX,
-          ["DEFAULT", rows[0].user_id, "clean", 0],
+          ["DEFAULT", rows[0].user_id, rows[0].username, "clean", 0],
           (errXX, rowsXX, fieldsXX) => {
             if (errXX) {
               console.log(errXX);
@@ -68,7 +68,7 @@ exports.initialize = (res, cb) => {
       } else if (rows.length != 0) {
         connection.query(
           queryStringXX,
-          ["DEFAULT", rows[0].user_id, "trash", 0],
+          ["DEFAULT", rows[0].user_id, rows[0].username, "trash", 0],
           (errXX, rowsXX, fieldsXX) => {
             if (errXX) {
               console.log(errXX);
@@ -91,7 +91,7 @@ exports.initialize = (res, cb) => {
       } else if (rows.length != 0) {
         connection.query(
           queryStringXX,
-          ["DEFAULT", rows[0].user_id, "dish", 0],
+          ["DEFAULT", rows[0].user_id, rows[0].username, "dish", 0],
           (errXX, rowsXX, fieldsXX) => {
             if (errXX) {
               console.log(errXX);

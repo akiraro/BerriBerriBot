@@ -28,11 +28,11 @@ function generateInlineKeyboard(type) {
   var inlineKeyboard = [
     [
       {
-        text: "Yes",
+        text: "Yes \u{274C}",
         callback_data: letter + "Yes"
       },
       {
-        text: "No",
+        text: "No \u{2705}",
         callback_data: letter + "No"
       }
     ]
@@ -50,16 +50,16 @@ function generateMessage(type) {
 
   switch (type) {
     case "cook":
-      message = "!! REMINDER !!\nHave you cook for today ?";
+      message = "\u{1F50A} REMINDER \u{1F50A}\nHave you cook for today ?";
       break;
     case "dish":
-      message = "!! REMINDER !!\nHave you do the dishes ?";
+      message = "\u{1F50A} REMINDER \u{1F50A}\nHave you do the dishes ?";
       break;
     case "trash":
-      message = "!! REMINDER !!\nHave you take out the trash ?";
+      message = "\u{1F50A} REMINDER \u{1F50A}\nHave you take out the trash ?";
       break;
     case "clean":
-      message = "!! REMINDER !!\nHave you clean the kitchen ?";
+      message = "\u{1F50A} REMINDER \u{1F50A}\nHave you clean the kitchen ?";
       break;
   }
 
@@ -139,38 +139,6 @@ function processReminder(data) {
     }
   }
 }
-
-/**
- * Get status of all cron jobs
- */
-exports.getStatus = cb => {
-  var d = new Date();
-  var n = getDay(d.getDay());
-
-  const queryString = "SELECT * FROM cron";
-
-  var message = "-- RUE BERRI CHORES --\n";
-  pool.getConnection(function(err, connection) {
-    if (err) throw err;
-    connection.query(queryString, [], (err, rows, fields) => {
-      if (err) {
-        throw err;
-      } else {
-        for (var i = 0; i < rows.length; i++) {
-          if (rows[i].status == 0) {
-            message =
-              message + rows[i].job.toUpperCase() + "\t \u{274C}" + "\n";
-          } else {
-            message =
-              message + rows[i].job.toUpperCase() + "\t \u{2705}" + "\n";
-          }
-        }
-        cb(message);
-        connection.release();
-      }
-    });
-  });
-};
 
 /**
  * CRON JOB FUNCTIONALITY
@@ -465,4 +433,132 @@ exports.generateScheduleDate = data => {
   }
 
   return schedule;
+};
+
+/**
+ * Get status of all cron jobs
+ */
+exports.getStatus = cb => {
+  var d = new Date();
+  var n = getDay(d.getDay());
+
+  const queryString = "SELECT * FROM cron";
+
+  var message = "\u{1F3E0} RUE BERRI CHORES \u{1F3E0}\n";
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    connection.query(queryString, [], (err, rows, fields) => {
+      if (err) {
+        throw err;
+      } else {
+        for (var i = 0; i < rows.length; i++) {
+          if (rows[i].job == "cook") {
+            if (rows[i].status == 0) {
+              message =
+                message +
+                "\u{1F373} \t" +
+                rows[i].job.toUpperCase() +
+                " - " +
+                rows[i].username +
+                " -> " +
+                n +
+                "\t \u{274C}" +
+                "\n";
+            } else {
+              message =
+                message +
+                "\u{1F373} \t" +
+                rows[i].job.toUpperCase() +
+                " - " +
+                rows[i].username +
+                " -> " +
+                n +
+                "\t \u{2705}" +
+                "\n";
+            }
+          } else if (rows[i].job == "dish") {
+            if (rows[i].status == 0) {
+              message =
+                message +
+                "\u{1F37D} \t" +
+                rows[i].job.toUpperCase() +
+                " - " +
+                rows[i].username +
+                " -> " +
+                n +
+                "\t \u{274C}" +
+                "\n";
+            } else {
+              message =
+                message +
+                "\u{1F37D} \t" +
+                rows[i].job.toUpperCase() +
+                " - " +
+                rows[i].username +
+                " -> " +
+                n +
+                "\t \u{2705}" +
+                "\n";
+            }
+          } else if (rows[i].job == "clean") {
+            if (rows[i].status == 0) {
+              message =
+                message +
+                "\u{1F9FC} \t" +
+                rows[i].job.toUpperCase() +
+                " - " +
+                rows[i].username +
+                " -> " +
+                getDay(0) +
+                "\t \u{274C}" +
+                "\n";
+            } else {
+              message =
+                message +
+                "\u{1F9FC} \t" +
+                rows[i].job.toUpperCase() +
+                " - " +
+                rows[i].username +
+                " -> " +
+                getDay(0) +
+                "\t \u{2705}" +
+                "\n";
+            }
+          } else if (rows[i].job == "trash") {
+            if (d.getDay() == 0 || d.getDay() == 5 || d.getDay() == 6) {
+              var day = "sunday";
+            } else {
+              var day = "thursday";
+            }
+
+            if (rows[i].status == 0) {
+              message =
+                message +
+                "\u{1F5D1} \t" +
+                rows[i].job.toUpperCase() +
+                " - " +
+                rows[i].username +
+                " -> " +
+                day +
+                "\t \u{274C}" +
+                "\n";
+            } else {
+              message =
+                message +
+                "\u{1F5D1} \t" +
+                rows[i].job.toUpperCase() +
+                " - " +
+                rows[i].username +
+                " -> " +
+                day +
+                "\t \u{2705}" +
+                "\n";
+            }
+          }
+        }
+        cb(message);
+        connection.release();
+      }
+    });
+  });
 };

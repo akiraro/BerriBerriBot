@@ -49,7 +49,6 @@ app.post("/", function(req, res) {
   try {
     console.log("Request from user_id : ");
     console.log(req.body.message.from.id);
-    // console.log(req.body);
   } catch (err) {
     console.log(err);
   }
@@ -66,17 +65,15 @@ app.post("/", function(req, res) {
     tempData = {};
   } else {
     // Handle normal command
-    if (store[message.from.id] != null) {
+    if (store[message.from.id] != null && message.text[0] != "/") {
       // Check if previous command from user
       switch (store[message.from.id]) {
         case "/register":
           tempData[message.from.id] = [message.text];
-          // tempData.push(message.text);
           message.text = "/register2";
           break;
         case "/addgrocerylist":
           tempData[message.from.id] = [message.text];
-          // tempData.push(message.text);
           message.text = "/addgrocerylist2";
           break;
         case "/addgrocerylist2":
@@ -97,6 +94,9 @@ app.post("/", function(req, res) {
       }
     }
 
+    store[message.from.id] = null; //Clearing user previous command
+    tempData[message.from.id] = []; //Clearing tempData
+
     // Switch case to identify the user command
     switch (message.text) {
       case "/init":
@@ -115,7 +115,7 @@ app.post("/", function(req, res) {
           if (result === true) {
             Message.sendMessage(
               message.chat.id,
-              "Uh oh, dont be dumb. You already register",
+              "\u{203C} Uh oh, dont be dumb. You already register \u{203C}",
               { remove_keyboard: true },
               res
             );
@@ -132,7 +132,6 @@ app.post("/", function(req, res) {
         break;
 
       case "/register2": // Next step user registration
-        store[message.from.id] = null;
         userControllers.registerUser(
           message.from.id,
           tempData[message.from.id][0],
@@ -144,6 +143,8 @@ app.post("/", function(req, res) {
           { remove_keyboard: true },
           res
         );
+        store[message.from.id] = null; //Clearing user previous command
+        tempData[message.from.id] = []; //Clearing tempData
         break;
 
       case "/schedule": // Show the cook schedule
@@ -262,11 +263,14 @@ app.post("/", function(req, res) {
         scheduleControllers.getCookSchedule(function(result) {
           var text = "";
           var schedule = cronControllers.generateScheduleDate(result);
-          var inlineKeyboard = [[]];
+          var keyVal = "003";
+          var inlineKeyboard = [[], [], []];
           for (var i = 0; i < result.length; i++) {
             text = text + schedule[i];
-            inlineKeyboard[0].push({
-              text: i + 1,
+            inlineKeyboard[~~(i / 3)].push({
+              text:
+                String.fromCharCode(parseInt(keyVal + (i + 1), 16)) +
+                String.fromCharCode(parseInt("20E3", 16)),
               callback_data: "G" + (i + 1)
             });
           }
@@ -277,28 +281,12 @@ app.post("/", function(req, res) {
             res
           );
         });
-        // userControllers.getUsers(function(result) {
-        // var inlineKeyboard = [[]];
-        // for (var i = 0; i < result.length; i++) {
-        //   inlineKeyboard[0].push({
-        //     text: result[i].username,
-        //     callback_data: "B" + result[i].user_id
-        //   });
-        // }
-        // Message.sendMessage(
-        //   message.chat.id,
-        //   "Who will you swap you schedule with ?",
-        //   { inline_keyboard: inlineKeyboard },
-        //   res
-        // );
-        //   res.end();
-        // });
         break;
 
       case "/addgrocerylist":
         Message.sendMessage(
           message.chat.id,
-          "What is the name of the item ?",
+          "\u{2753} What is the name of the item \u{2753}",
           { remove_keyboard: true },
           res
         );
@@ -311,7 +299,7 @@ app.post("/", function(req, res) {
         store[message.from.id] = "/addgrocerylist2";
         Message.sendMessage(
           message.chat.id,
-          "What is the remark for the item ?",
+          "\u{2753} What is the remark for the item \u{2753}",
           { remove_keyboard: true },
           res
         );
@@ -332,7 +320,7 @@ app.post("/", function(req, res) {
 
       case "/grocerylist":
         groceryControllers.getGrocery(function(result) {
-          var text = "Grocery List :\n";
+          var text = "\u{1F6D2} Grocery List \u{1F6D2}\n";
           for (var i = 0; i < result.length; i++) {
             text =
               text +
