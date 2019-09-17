@@ -448,3 +448,21 @@ function shiftDishSchedule() {
     });
   });
 }
+
+/**
+ * Generate schedule with day
+ */
+
+exports.generateScheduleDate = data => {
+  var schedule = [];
+  var d = new Date();
+  var n = d.getDay();
+
+  for (var i = 0; i < data.length; i++) {
+    schedule.push(
+      i + 1 + ". " + data[i].username + " - " + getDay((n + i) % 7) + "\n"
+    );
+  }
+
+  return schedule;
+};

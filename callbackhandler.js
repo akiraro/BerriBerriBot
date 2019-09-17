@@ -192,5 +192,35 @@ exports.handler = (cbQuery, res) => {
         res
       );
     });
+  } else if (cbQuery.data[0] === "G") {
+    // Swap schedule
+    Message.deleteMessage(cbQuery, res);
+    scheduleControllers.getCookSchedule(function(result) {
+      var text = "";
+      var schedule = cronControllers.generateScheduleDate(result);
+      var inlineKeyboard = [[]];
+      for (var i = 0; i < result.length; i++) {
+        text = text + schedule[i];
+        inlineKeyboard[0].push({
+          text: i + 1,
+          callback_data: "H" + (i + 1) + cbQuery.data[1]
+        });
+      }
+      Message.sendMessage(
+        cbQuery.message.chat.id,
+        "Which user you want to swap your schedule with ?\n" + text,
+        { inline_keyboard: inlineKeyboard },
+        res
+      );
+    });
+  } else if (cbQuery.data[0] === "H") {
+    Message.deleteMessage(cbQuery, res);
+    Message.sendMessage(
+      cbQuery.message.chat.id,
+      "Success ! Schedule swapped !",
+      null,
+      res
+    );
+    scheduleControllers.swapCookSchedule(cbQuery, res);
   }
 };

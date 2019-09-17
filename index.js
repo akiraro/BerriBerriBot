@@ -18,7 +18,7 @@ var cronControllers = require("./controllers/cron.js");
 var CallbackHandler = require("./callbackhandler.js");
 
 // 944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ  Telegram API
-// curl -F "url=https://c1a27d87.ngrok.io"  https://api.telegram.org/bot944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ/setWebhook
+// curl -F "url=https://154ed825.ngrok.io"  https://api.telegram.org/bot944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ/setWebhook
 
 /**
  * TEMPERORY VARIABLES
@@ -49,6 +49,7 @@ app.post("/", function(req, res) {
   try {
     console.log("Request from user_id : ");
     console.log(req.body.message.from.id);
+    // console.log(req.body);
   } catch (err) {
     console.log(err);
   }
@@ -258,22 +259,40 @@ app.post("/", function(req, res) {
         break;
 
       case "/swapcookschedule": // Swap schedule with different user
-        userControllers.getUsers(function(result) {
+        scheduleControllers.getCookSchedule(function(result) {
+          var text = "";
+          var schedule = cronControllers.generateScheduleDate(result);
           var inlineKeyboard = [[]];
           for (var i = 0; i < result.length; i++) {
+            text = text + schedule[i];
             inlineKeyboard[0].push({
-              text: result[i].username,
-              callback_data: "B" + result[i].user_id
+              text: i + 1,
+              callback_data: "G" + (i + 1)
             });
           }
           Message.sendMessage(
             message.chat.id,
-            "Who will you swap you schedule with ?",
+            "Which schedule do you want to swap ?\n" + text,
             { inline_keyboard: inlineKeyboard },
             res
           );
-          res.end();
         });
+        // userControllers.getUsers(function(result) {
+        // var inlineKeyboard = [[]];
+        // for (var i = 0; i < result.length; i++) {
+        //   inlineKeyboard[0].push({
+        //     text: result[i].username,
+        //     callback_data: "B" + result[i].user_id
+        //   });
+        // }
+        // Message.sendMessage(
+        //   message.chat.id,
+        //   "Who will you swap you schedule with ?",
+        //   { inline_keyboard: inlineKeyboard },
+        //   res
+        // );
+        //   res.end();
+        // });
         break;
 
       case "/addgrocerylist":

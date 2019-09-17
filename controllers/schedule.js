@@ -204,43 +204,43 @@ exports.getCookSchedule = cb => {
 /**
  * Swap the requested user cook schedule with another user
  */
-exports.swapCookSchedule = (user_id, cbQuery, res) => {
-  const queryString = "SELECT sequence FROM cook WHERE user_id IN (?,?)";
-  const queryString2 = "UPDATE cook SET sequence = ? WHERE user_id = ?";
-  const queryString3 = "UPDATE cook SET sequence = ? WHERE user_id = ?";
+exports.swapCookSchedule = (cbQuery, res) => {
+  const queryString = "SELECT * FROM cook ORDER BY sequence ASC";
+  const queryString2 = "UPDATE cook SET sequence = ? WHERE id = ?";
+
+  const to = parseInt(cbQuery.data[1] - 1, 10);
+  const from = parseInt(cbQuery.data[2] - 1, 10);
+
+  console.log("SWAP FROM TO ", from, to);
   pool.getConnection(function(err, connection) {
     if (err) throw err;
-    connection.query(
-      queryString,
-      [user_id, cbQuery.data.slice(1, cbQuery.data.length)],
-      (err, rows, fields) => {
-        if (err) {
-          throw err;
-        } else {
-          connection.query(
-            queryString2,
-            [rows[0].sequence, cbQuery.data.slice(1, cbQuery.data.length)],
-            (err2, rows2, fields2) => {
-              if (err2) {
-                throw err2;
-              } else {
-                connection.query(
-                  queryString3,
-                  [rows[1].sequence, user_id],
-                  (err3, rows3, fields3) => {
-                    if (err3) {
-                      console.log(err3);
-                    } else {
-                      connection.release();
-                      res.end("ok");
-                    }
+    connection.query(queryString, [], (err, rows, fields) => {
+      if (err) {
+        throw err;
+      } else {
+        connection.query(
+          queryString2,
+          [rows[from].sequence, rows[to].id],
+          (err2, rows2, fields2) => {
+            if (err2) {
+              throw err2;
+            } else {
+              connection.query(
+                queryString2,
+                [rows[to].sequence, rows[from].id],
+                (err3, rows3, fields3) => {
+                  if (err3) {
+                    console.log(err3);
+                  } else {
+                    connection.release();
+                    res.end("ok");
                   }
-                );
-              }
+                }
+              );
             }
-          );
-        }
+          }
+        );
       }
-    );
+    });
   });
 };
