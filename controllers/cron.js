@@ -95,48 +95,44 @@ function getDay(value) {
   return day;
 }
 
-function processReminder(data, res) {
+function processReminder(data) {
   var d = new Date();
   var n = getDay(d.getDay());
 
   for (var i = 0; i < data.length; i++) {
     switch (data[i].job) {
       case "cook":
-        Message.sendMessage(
-          data[i].user_id,
-          generateMessage(data[i].job),
-          { inline_keyboard: generateInlineKeyboard(data[i].job) },
-          res
-        );
+        Message.sendCronMessage(data[i].user_id, generateMessage(data[i].job), {
+          inline_keyboard: generateInlineKeyboard(data[i].job)
+        });
         break;
 
       case "clean":
         if (n == "sunday") {
-          Message.sendMessage(
+          Message.sendCronMessage(
             data[i].user_id,
             generateMessage(data[i].job),
-            { inline_keyboard: generateInlineKeyboard(data[i].job) },
-            res
+            {
+              inline_keyboard: generateInlineKeyboard(data[i].job)
+            }
           );
         }
         break;
 
       case "dish":
-        Message.sendMessage(
-          data[i].user_id,
-          generateMessage(data[i].job),
-          { inline_keyboard: generateInlineKeyboard(data[i].job) },
-          res
-        );
+        Message.sendCronMessage(data[i].user_id, generateMessage(data[i].job), {
+          inline_keyboard: generateInlineKeyboard(data[i].job)
+        });
         break;
 
       case "trash":
         if (n == "sunday" || n == "thursday") {
-          Message.sendMessage(
+          Message.sendCronMessage(
             data[i].user_id,
             generateMessage(data[i].job),
-            { inline_keyboard: generateInlineKeyboard(data[i].job) },
-            res
+            {
+              inline_keyboard: generateInlineKeyboard(data[i].job)
+            }
           );
         }
         break;
@@ -145,11 +141,43 @@ function processReminder(data, res) {
 }
 
 /**
+ * Get status of all cron jobs
+ */
+exports.getStatus = cb => {
+  var d = new Date();
+  var n = getDay(d.getDay());
+
+  const queryString = "SELECT * FROM cron";
+
+  var message = "-- RUE BERRI CHORES --\n";
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    connection.query(queryString, [], (err, rows, fields) => {
+      if (err) {
+        throw err;
+      } else {
+        for (var i = 0; i < rows.length; i++) {
+          if (rows[i].status == 0) {
+            message =
+              message + rows[i].job.toUpperCase() + "\t \u{274C}" + "\n";
+          } else {
+            message =
+              message + rows[i].job.toUpperCase() + "\t \u{2705}" + "\n";
+          }
+        }
+        cb(message);
+        connection.release();
+      }
+    });
+  });
+};
+
+/**
  * CRON JOB FUNCTIONALITY
  * Check up the cron database and send reminders
  */
 
-exports.sendReminder = res => {
+exports.sendReminder = () => {
   const queryString = "SELECT * FROM cron WHERE status = 0";
   const queryString2 = "SELECT status FROM `?` WHERE user_id = ?";
 
@@ -160,7 +188,7 @@ exports.sendReminder = res => {
       if (err) {
         throw err;
       } else {
-        processReminder(rows, res);
+        processReminder(rows);
       }
     });
   });
@@ -192,6 +220,7 @@ exports.changeStatus = (type, res) => {
  */
 
 exports.shiftSchedule = res => {
+  console.log("SHIFT SCHEDULE CRON");
   var d = new Date();
   var n = getDay(d.getDay());
 

@@ -244,32 +244,3 @@ exports.swapCookSchedule = (user_id, cbQuery, res) => {
     );
   });
 };
-
-/**
- * Get status of all cron jobs
- */
-exports.getStatus = cb => {
-  const queryString = "SELECT * FROM cron";
-
-  var message = "-- RUE BERRI CHORES --\n";
-  pool.getConnection(function(err, connection) {
-    if (err) throw err;
-    connection.query(queryString, [], (err, rows, fields) => {
-      if (err) {
-        throw err;
-      } else {
-        for (var i = 0; i < rows.length; i++) {
-          if (rows[i].status == 0) {
-            message =
-              message + rows[i].job.toUpperCase() + "\t \u{274C}" + "\n";
-          } else {
-            message =
-              message + rows[i].job.toUpperCase() + "\t \u{2705}" + "\n";
-          }
-        }
-        cb(message);
-        connection.release();
-      }
-    });
-  });
-};

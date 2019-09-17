@@ -42,19 +42,16 @@ app.use(
 );
 
 /**
- * SEND REMINDER
- */
-app.post("/sendReminder", function(req, res) {
-  cronControllers.sendReminder(res);
-});
-
-/**
  * ROUTE FOR TELEGRAM BOT WEBHOOK
  */
 app.post("/", function(req, res) {
   console.log("\nNEW REQUEST");
-  console.log("Request from user_id : ");
-  console.log(req.body.message.from.id);
+  try {
+    console.log("Request from user_id : ");
+    console.log(req.body.message.from.id);
+  } catch (err) {
+    console.log(err);
+  }
 
   if (req.body.message != null) {
     var message = req.body.message;
@@ -333,7 +330,7 @@ app.post("/", function(req, res) {
         break;
 
       case "/status":
-        scheduleControllers.getStatus(function(result) {
+        cronControllers.getStatus(function(result) {
           Message.sendMessage(message.chat.id, result, null, res);
           res.end();
         });

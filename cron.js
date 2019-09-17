@@ -8,3 +8,7 @@ if (process.argv[2] == "reminder") {
 } else if (process.argv[2] == "shift") {
   cronControllers.shiftSchedule();
 }
+
+setTimeout(function() {
+  process.exit();
+}, 10000);

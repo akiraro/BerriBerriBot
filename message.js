@@ -27,6 +27,31 @@ exports.sendMessage = (chat_id, text, keyboard, res) => {
     });
 };
 
+exports.sendCronMessage = (chat_id, text, keyboard) => {
+  var bodyReq = {};
+  if (keyboard == null) {
+    bodyReq = { chat_id: chat_id, text: text };
+  } else {
+    bodyReq = {
+      chat_id: chat_id,
+      text: text,
+      reply_markup: keyboard
+    };
+  }
+
+  axios
+    .post(
+      "https://api.telegram.org/bot944372454:AAFt9DRVqIINSi4rGmj8YxvDmkq5FdeeOnQ/sendMessage",
+      bodyReq
+    )
+    .then(response => {
+      console.log("Message posted");
+    })
+    .catch(err => {
+      console.log("Error :", err);
+    });
+};
+
 exports.editMessage = (cbQuery, text, keyboard, res) => {
   var bodyReq = {
     chat_id: cbQuery.message.chat.id,
