@@ -9,7 +9,6 @@ var bodyParser = require("body-parser");
  * CONFIG AND CONTROLLER
  */
 var Message = require("./message.js");
-var Work = require("./helper.js");
 var scheduleControllers = require("./controllers/schedule.js");
 var userControllers = require("./controllers/user.js");
 var initControllers = require("./controllers/initialize.js");
@@ -49,9 +48,7 @@ app.post("/", function(req, res) {
   try {
     console.log("Request from user_id : ");
     console.log(req.body.message.from.id);
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 
   if (req.body.message != null) {
     var message = req.body.message;
@@ -92,10 +89,10 @@ app.post("/", function(req, res) {
           tempData[message.from.id] = []; //Clearing tempData
           break;
       }
+    } else {
+      store[message.from.id] = null; //Clearing user previous command
+      tempData[message.from.id] = []; //Clearing tempData
     }
-
-    store[message.from.id] = null; //Clearing user previous command
-    tempData[message.from.id] = []; //Clearing tempData
 
     // Switch case to identify the user command
     switch (message.text) {
@@ -151,7 +148,7 @@ app.post("/", function(req, res) {
         scheduleControllers.getCookSchedule(function(result) {
           Message.sendMessage(
             message.chat.id,
-            Work.printSchedule(result),
+            cronControllers.printSchedule(result),
             { remove_keyboard: true },
             res
           );
@@ -261,12 +258,10 @@ app.post("/", function(req, res) {
 
       case "/swapcookschedule": // Swap schedule with different user
         scheduleControllers.getCookSchedule(function(result) {
-          var text = "";
-          var schedule = cronControllers.generateScheduleDate(result);
+          var schedule = cronControllers.printScheduleForSwap(result);
           var keyVal = "003";
           var inlineKeyboard = [[], [], []];
           for (var i = 0; i < result.length; i++) {
-            text = text + schedule[i];
             inlineKeyboard[~~(i / 3)].push({
               text:
                 String.fromCharCode(parseInt(keyVal + (i + 1), 16)) +
@@ -276,7 +271,7 @@ app.post("/", function(req, res) {
           }
           Message.sendMessage(
             message.chat.id,
-            "Which schedule do you want to swap ?\n" + text,
+            "Which schedule do you want to swap ?\n" + schedule,
             { inline_keyboard: inlineKeyboard },
             res
           );

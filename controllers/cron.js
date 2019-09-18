@@ -28,11 +28,11 @@ function generateInlineKeyboard(type) {
   var inlineKeyboard = [
     [
       {
-        text: "Yes \u{274C}",
+        text: "Yes \u{2705}",
         callback_data: letter + "Yes"
       },
       {
-        text: "No \u{2705}",
+        text: "No \u{274C}",
         callback_data: letter + "No"
       }
     ]
@@ -217,7 +217,7 @@ function shiftCookSchedule() {
    * queryString4 -> Add the user into cron
    */
   const queryString =
-    "UPDATE Cook SET sequence = ((SELECT sequence FROM (SELECT * FROM Cook)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE user_id = (SELECT user_id FROM (SELECT * FROM Cook ORDER BY sequence ASC LIMIT 1)  AS temp) ";
+    "UPDATE Cook SET sequence = ((SELECT sequence FROM (SELECT * FROM Cook)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE id = (SELECT id FROM (SELECT * FROM Cook ORDER BY sequence ASC LIMIT 1)  AS temp) ";
   const queryString2 = "DELETE FROM cron WHERE job = 'cook'";
   const queryString3 = "SELECT * FROM `cook` ORDER BY sequence ASC LIMIT 1";
   const queryString4 =
@@ -270,7 +270,7 @@ function shiftCleanSchedule() {
    * queryString4 -> Add the user into cron
    */
   const queryString =
-    "UPDATE clean SET sequence = ((SELECT sequence FROM (SELECT * FROM clean)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE user_id = (SELECT user_id FROM (SELECT * FROM clean ORDER BY sequence ASC LIMIT 1)  AS temp) ";
+    "UPDATE clean SET sequence = ((SELECT sequence FROM (SELECT * FROM clean)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE id = (SELECT id FROM (SELECT * FROM clean ORDER BY sequence ASC LIMIT 1)  AS temp) ";
   const queryString2 = "DELETE FROM cron WHERE job = 'clean'";
   const queryString3 = "SELECT * FROM `clean` ORDER BY sequence ASC LIMIT 1";
   const queryString4 =
@@ -323,7 +323,7 @@ function shiftTrashSchedule() {
    * queryString4 -> Add the user into cron
    */
   const queryString =
-    "UPDATE trash SET sequence = ((SELECT sequence FROM (SELECT * FROM trash)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE user_id = (SELECT user_id FROM (SELECT * FROM trash ORDER BY sequence ASC LIMIT 1)  AS temp) ";
+    "UPDATE trash SET sequence = ((SELECT sequence FROM (SELECT * FROM trash)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE id = (SELECT id FROM (SELECT * FROM trash ORDER BY sequence ASC LIMIT 1)  AS temp) ";
   const queryString2 = "DELETE FROM cron WHERE job = 'trash'";
   const queryString3 = "SELECT * FROM `trash` ORDER BY sequence ASC LIMIT 1";
   const queryString4 =
@@ -376,7 +376,7 @@ function shiftDishSchedule() {
    * queryString4 -> Add the user into cron
    */
   const queryString =
-    "UPDATE dish SET sequence = ((SELECT sequence FROM (SELECT * FROM dish)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE user_id = (SELECT user_id FROM (SELECT * FROM dish ORDER BY sequence ASC LIMIT 1)  AS temp) ";
+    "UPDATE dish SET sequence = ((SELECT sequence FROM (SELECT * FROM dish)  AS temp3 ORDER BY sequence DESC LIMIT 1) + 1)  WHERE id = (SELECT id FROM (SELECT * FROM dish ORDER BY sequence ASC LIMIT 1)  AS temp) ";
   const queryString2 = "DELETE FROM cron WHERE job = 'dish'";
   const queryString3 = "SELECT * FROM `dish` ORDER BY sequence ASC LIMIT 1";
   const queryString4 =
@@ -456,7 +456,8 @@ exports.getStatus = cb => {
             if (rows[i].status == 0) {
               message =
                 message +
-                "\u{1F373} \t" +
+                "\u{1F468}\u{200D}\u{1F373}" +
+                " \t" +
                 rows[i].job.toUpperCase() +
                 " - " +
                 rows[i].username +
@@ -467,7 +468,8 @@ exports.getStatus = cb => {
             } else {
               message =
                 message +
-                "\u{1F373} \t" +
+                "\u{1F468}\u{200D}\u{1F373}" +
+                " \t" +
                 rows[i].job.toUpperCase() +
                 " - " +
                 rows[i].username +
@@ -561,4 +563,68 @@ exports.getStatus = cb => {
       }
     });
   });
+};
+
+exports.printSchedule = cookSchedule => {
+  var d = new Date();
+
+  var data = "\u{1F373} COOK SCHEDULE \u{1F373}\n";
+  var today = new Date();
+  for (var i = 0; i < cookSchedule.length; i++) {
+    var loopToday = new Date();
+    loopToday.setDate(today.getDate() + i);
+    var dd = loopToday.getDate().toString();
+    var mm = loopToday.getMonth();
+    var yy = loopToday.getFullYear();
+    data =
+      data +
+      "\u{1F4C5}" +
+      dd +
+      "/" +
+      mm +
+      "/" +
+      yy +
+      " (" +
+      getDay((d.getDay() + i) % 6) +
+      ")" +
+      " - " +
+      "\u{1F468}\u{200D}\u{1F373}" +
+      cookSchedule[i].username +
+      "\n";
+  }
+
+  return data;
+};
+
+exports.printScheduleForSwap = cookSchedule => {
+  var d = new Date();
+  var keyVal = "003";
+  var data = "";
+  var today = new Date();
+  for (var i = 0; i < cookSchedule.length; i++) {
+    var loopToday = new Date();
+    loopToday.setDate(today.getDate() + i);
+    var dd = loopToday.getDate().toString();
+    var mm = loopToday.getMonth();
+    var yy = loopToday.getFullYear();
+    data =
+      data +
+      String.fromCharCode(parseInt(keyVal + (i + 1), 16)) +
+      String.fromCharCode(parseInt("20E3", 16)) +
+      ". \u{1F4C5}" +
+      dd +
+      "/" +
+      mm +
+      "/" +
+      yy +
+      " (" +
+      getDay((d.getDay() + i) % 6) +
+      ")" +
+      " - " +
+      "\u{1F468}\u{200D}\u{1F373}" +
+      cookSchedule[i].username +
+      "\n";
+  }
+
+  return data;
 };

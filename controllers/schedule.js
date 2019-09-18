@@ -5,10 +5,12 @@ const pool = mysql.createPool(config);
 /**
  * Add user to cook schedule database
  */
-exports.addCookSchedule = (user_id, username, res) => {
+exports.addCookSchedule = (username, res) => {
   const queryString = "SELECT * FROM Cook ORDER BY sequence DESC LIMIT 1";
   const queryString2 =
-    "INSERT INTO `Cook` (sequence,user_id,username) VALUES (?,?,?)";
+    "INSERT INTO `cook` (sequence,user_id,username) SELECT 1,user_id,username FROM users WHERE username = ?";
+  const queryString3 =
+    "INSERT INTO `cook` (sequence,user_id,username) SELECT ?,user_id,username FROM users WHERE username = ?";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -17,26 +19,20 @@ exports.addCookSchedule = (user_id, username, res) => {
       if (err) {
         throw err;
       } else if (rows.length == 0) {
-        connection.query(
-          queryString2,
-          [1, user_id, username],
-          (err2, rows2, fields2) => {
-            if (err) {
-              console.log(err);
-            } else {
-              connection.release();
-              res.end("ok");
-            }
+        connection.query(queryString2, [username], (err2, rows2, fields2) => {
+          if (err) throw err;
+          else {
+            connection.release();
+            res.end("ok");
           }
-        );
+        });
       } else {
         connection.query(
-          queryString2,
-          [rows[0].sequence + 1, user_id, username],
+          queryString3,
+          [rows[0].sequence + 1, username],
           (err2, rows2, fields2) => {
-            if (err) {
-              console.log(err);
-            } else {
+            if (err) throw err;
+            else {
               connection.release();
               res.end("ok");
             }
@@ -50,10 +46,12 @@ exports.addCookSchedule = (user_id, username, res) => {
 /**
  * Add user to dish schedule database
  */
-exports.addDishSchedule = (user_id, username, res) => {
+exports.addDishSchedule = (username, res) => {
   const queryString = "SELECT * FROM dish ORDER BY sequence DESC LIMIT 1";
   const queryString2 =
-    "INSERT INTO `dish` (sequence,user_id,username) VALUES (?,?,?)";
+    "INSERT INTO `dish` (sequence,user_id,username) SELECT 1,user_id,username FROM users WHERE username = ?";
+  const queryString3 =
+    "INSERT INTO `dish` (sequence,user_id,username) SELECT ?,user_id,username FROM users WHERE username = ?";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -62,26 +60,20 @@ exports.addDishSchedule = (user_id, username, res) => {
       if (err) {
         throw err;
       } else if (rows.length == 0) {
-        connection.query(
-          queryString2,
-          [1, user_id, username],
-          (err2, rows2, fields2) => {
-            if (err) {
-              console.log(err);
-            } else {
-              connection.release();
-              res.end("ok");
-            }
+        connection.query(queryString2, [username], (err2, rows2, fields2) => {
+          if (err) throw err;
+          else {
+            connection.release();
+            res.end("ok");
           }
-        );
+        });
       } else {
         connection.query(
-          queryString2,
-          [rows[0].sequence + 1, user_id, username],
+          queryString3,
+          [rows[0].sequence + 1, username],
           (err2, rows2, fields2) => {
-            if (err) {
-              console.log(err);
-            } else {
+            if (err) throw err;
+            else {
               connection.release();
               res.end("ok");
             }
@@ -95,10 +87,12 @@ exports.addDishSchedule = (user_id, username, res) => {
 /**
  * Add user to trash schedule database
  */
-exports.addTrashSchedule = (user_id, username, res) => {
+exports.addTrashSchedule = (username, res) => {
   const queryString = "SELECT * FROM trash ORDER BY sequence DESC LIMIT 1";
   const queryString2 =
-    "INSERT INTO `trash` (sequence,user_id,username) VALUES (?,?,?)";
+    "INSERT INTO `trash` (sequence,user_id,username) SELECT 1,user_id,username FROM users WHERE username = ?";
+  const queryString3 =
+    "INSERT INTO `trash` (sequence,user_id,username) SELECT ?,user_id,username FROM users WHERE username = ?";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -107,26 +101,20 @@ exports.addTrashSchedule = (user_id, username, res) => {
       if (err) {
         throw err;
       } else if (rows.length == 0) {
-        connection.query(
-          queryString2,
-          [1, user_id, username],
-          (err2, rows2, fields2) => {
-            if (err) {
-              console.log(err);
-            } else {
-              connection.release();
-              res.end("ok");
-            }
+        connection.query(queryString2, [username], (err2, rows2, fields2) => {
+          if (err) throw err;
+          else {
+            connection.release();
+            res.end("ok");
           }
-        );
+        });
       } else {
         connection.query(
-          queryString2,
-          [rows[0].sequence + 1, user_id, username],
+          queryString3,
+          [rows[0].sequence + 1, username],
           (err2, rows2, fields2) => {
-            if (err) {
-              console.log(err);
-            } else {
+            if (err) throw err;
+            else {
               connection.release();
               res.end("ok");
             }
@@ -140,10 +128,12 @@ exports.addTrashSchedule = (user_id, username, res) => {
 /**
  * Add user to clean schedule database
  */
-exports.addCleanSchedule = (user_id, username, res) => {
+exports.addCleanSchedule = (username, res) => {
   const queryString = "SELECT * FROM clean ORDER BY sequence DESC LIMIT 1";
   const queryString2 =
-    "INSERT INTO `clean` (sequence,user_id,username) VALUES (?,?,?)";
+    "INSERT INTO `clean` (sequence,user_id,username) SELECT 1,user_id,username FROM users WHERE username = ?";
+  const queryString3 =
+    "INSERT INTO `clean` (sequence,user_id,username) SELECT ?,user_id,username FROM users WHERE username = ?";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -152,26 +142,20 @@ exports.addCleanSchedule = (user_id, username, res) => {
       if (err) {
         throw err;
       } else if (rows.length == 0) {
-        connection.query(
-          queryString2,
-          [1, user_id, username],
-          (err2, rows2, fields2) => {
-            if (err) {
-              console.log(err);
-            } else {
-              connection.release();
-              res.end("ok");
-            }
+        connection.query(queryString2, [username], (err2, rows2, fields2) => {
+          if (err) throw err;
+          else {
+            connection.release();
+            res.end("ok");
           }
-        );
+        });
       } else {
         connection.query(
-          queryString2,
-          [rows[0].sequence + 1, user_id, username],
+          queryString3,
+          [rows[0].sequence + 1, username],
           (err2, rows2, fields2) => {
-            if (err) {
-              console.log(err);
-            } else {
+            if (err) throw err;
+            else {
               connection.release();
               res.end("ok");
             }
@@ -207,33 +191,53 @@ exports.getCookSchedule = cb => {
 exports.swapCookSchedule = (cbQuery, res) => {
   const queryString = "SELECT * FROM cook ORDER BY sequence ASC";
   const queryString2 = "UPDATE cook SET sequence = ? WHERE id = ?";
+  const queryString3 =
+    "UPDATE cron SET user_id = ?, username = ?, status= 0 WHERE job = 'cook'";
 
   const to = parseInt(cbQuery.data[1] - 1, 10);
   const from = parseInt(cbQuery.data[2] - 1, 10);
 
-  console.log("SWAP FROM TO ", from, to);
+  console.log("FROM TO", from, to);
   pool.getConnection(function(err, connection) {
     if (err) throw err;
     connection.query(queryString, [], (err, rows, fields) => {
-      if (err) {
-        throw err;
-      } else {
+      if (err) throw err;
+      else {
         connection.query(
           queryString2,
           [rows[from].sequence, rows[to].id],
           (err2, rows2, fields2) => {
-            if (err2) {
-              throw err2;
-            } else {
+            if (err2) throw err2;
+            else {
               connection.query(
                 queryString2,
                 [rows[to].sequence, rows[from].id],
                 (err3, rows3, fields3) => {
-                  if (err3) {
-                    console.log(err3);
-                  } else {
-                    connection.release();
-                    res.end("ok");
+                  if (err3) throw err3;
+                  else {
+                    if (from == 0 || to == 0) {
+                      connection.query(queryString, [], (err, rows, fields) => {
+                        if (err) throw err;
+                        else {
+                          console.log(rows);
+                          connection.query(
+                            queryString3,
+                            [rows[0].user_id, rows[0].username],
+                            (err3, rows3, fields3) => {
+                              if (err3) {
+                                throw err3;
+                              } else {
+                                connection.release();
+                                res.end("ok");
+                              }
+                            }
+                          );
+                        }
+                      });
+                    } else {
+                      connection.release();
+                      res.end("ok");
+                    }
                   }
                 }
               );

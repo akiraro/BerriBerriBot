@@ -10,8 +10,8 @@ exports.handler = (cbQuery, res) => {
     //Delete message if done
     Message.deleteMessage(cbQuery, res);
   } else if (cbQuery.data[0] === "A") {
+    //Add cook schedule
     scheduleControllers.addCookSchedule(
-      cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
       res
     );
@@ -108,7 +108,6 @@ exports.handler = (cbQuery, res) => {
   } else if (cbQuery.data[0] === "D") {
     //Add dish schedule
     scheduleControllers.addDishSchedule(
-      cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
       res
     );
@@ -117,7 +116,7 @@ exports.handler = (cbQuery, res) => {
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
           text: result[i].username,
-          callback_data: "A" + result[i].username
+          callback_data: "D" + result[i].username
         });
       }
       inlineKeyboard.push([
@@ -137,7 +136,6 @@ exports.handler = (cbQuery, res) => {
   } else if (cbQuery.data[0] === "E") {
     //Add trash schedule
     scheduleControllers.addTrashSchedule(
-      cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
       res
     );
@@ -146,7 +144,7 @@ exports.handler = (cbQuery, res) => {
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
           text: result[i].username,
-          callback_data: "A" + result[i].username
+          callback_data: "E" + result[i].username
         });
       }
       inlineKeyboard.push([
@@ -166,7 +164,6 @@ exports.handler = (cbQuery, res) => {
   } else if (cbQuery.data[0] === "F") {
     //Add clean schedule
     scheduleControllers.addCleanSchedule(
-      cbQuery.from.id,
       cbQuery.data.slice(1, cbQuery.data.length),
       res
     );
@@ -175,7 +172,7 @@ exports.handler = (cbQuery, res) => {
       for (var i = 0; i < result.length; i++) {
         inlineKeyboard[0].push({
           text: result[i].username,
-          callback_data: "A" + result[i].username
+          callback_data: "F" + result[i].username
         });
       }
       inlineKeyboard.push([
@@ -196,12 +193,10 @@ exports.handler = (cbQuery, res) => {
     // Swap schedule
     Message.deleteMessage(cbQuery, res);
     scheduleControllers.getCookSchedule(function(result) {
-      var text = "";
-      var schedule = cronControllers.generateScheduleDate(result);
+      var schedule = cronControllers.printScheduleForSwap(result);
       var keyVal = "003";
       var inlineKeyboard = [[], [], []];
       for (var i = 0; i < result.length; i++) {
-        text = text + schedule[i];
         inlineKeyboard[~~(i / 3)].push({
           text:
             String.fromCharCode(parseInt(keyVal + (i + 1), 16)) +
@@ -211,7 +206,7 @@ exports.handler = (cbQuery, res) => {
       }
       Message.sendMessage(
         cbQuery.message.chat.id,
-        "Which user you want to swap your schedule with ?\n" + text,
+        "Which user you want to swap your schedule with ?\n" + schedule,
         { inline_keyboard: inlineKeyboard },
         res
       );

@@ -66,7 +66,6 @@ exports.editMessage = (cbQuery, text, keyboard, res) => {
       bodyReq
     )
     .then(response => {
-      console.log(response);
       res.end("ok");
     })
     .catch(err => {
@@ -88,7 +87,6 @@ exports.deleteMessage = (cbQuery, res) => {
       bodyReq
     )
     .then(response => {
-      console.log(response);
       res.end("ok");
     })
     .catch(err => {
