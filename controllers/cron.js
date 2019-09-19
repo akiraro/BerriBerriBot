@@ -221,7 +221,7 @@ function shiftCookSchedule() {
   const queryString2 = "DELETE FROM cron WHERE job = 'cook'";
   const queryString3 = "SELECT * FROM `cook` ORDER BY sequence ASC LIMIT 1";
   const queryString4 =
-    "INSERT INTO `cron` (`id`,`user_id`,`job`,`status`) VALUES (?,?,?,?)";
+    "INSERT INTO `cron` (`id`,`user_id`,`username`,`job`,`status`) VALUES (?,?,?,?,?)";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -240,7 +240,7 @@ function shiftCookSchedule() {
               } else {
                 connection.query(
                   queryString4,
-                  ["DEFAULT", rows3[0].user_id, "cook", 0],
+                  ["DEFAULT", rows3[0].user_id, rows3[0].username, "cook", 0],
                   (err4, rows4, fields4) => {
                     if (err4) {
                       throw err4;
@@ -274,7 +274,7 @@ function shiftCleanSchedule() {
   const queryString2 = "DELETE FROM cron WHERE job = 'clean'";
   const queryString3 = "SELECT * FROM `clean` ORDER BY sequence ASC LIMIT 1";
   const queryString4 =
-    "INSERT INTO `cron` (`id`,`user_id`,`job`,`status`) VALUES (?,?,?,?)";
+    "INSERT INTO `cron` (`id`,`user_id`,`username`,`job`,`status`) VALUES (?,?,?,?,?)";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -293,7 +293,7 @@ function shiftCleanSchedule() {
               } else {
                 connection.query(
                   queryString4,
-                  ["DEFAULT", rows3[0].user_id, "clean", 0],
+                  ["DEFAULT", rows3[0].user_id, rows3[0].username, "clean", 0],
                   (err4, rows4, fields4) => {
                     if (err4) {
                       throw err4;
@@ -327,7 +327,7 @@ function shiftTrashSchedule() {
   const queryString2 = "DELETE FROM cron WHERE job = 'trash'";
   const queryString3 = "SELECT * FROM `trash` ORDER BY sequence ASC LIMIT 1";
   const queryString4 =
-    "INSERT INTO `cron` (`id`,`user_id`,`job`,`status`) VALUES (?,?,?,?)";
+    "INSERT INTO `cron` (`id`,`user_id`,`username`,`job`,`status`) VALUES (?,?,?,?,?)";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -346,7 +346,7 @@ function shiftTrashSchedule() {
               } else {
                 connection.query(
                   queryString4,
-                  ["DEFAULT", rows3[0].user_id, "trash", 0],
+                  ["DEFAULT", rows3[0].user_id, rows3[0].username, "trash", 0],
                   (err4, rows4, fields4) => {
                     if (err4) {
                       throw err4;
@@ -380,7 +380,7 @@ function shiftDishSchedule() {
   const queryString2 = "DELETE FROM cron WHERE job = 'dish'";
   const queryString3 = "SELECT * FROM `dish` ORDER BY sequence ASC LIMIT 1";
   const queryString4 =
-    "INSERT INTO `cron` (`id`,`user_id`,`job`,`status`) VALUES (?,?,?,?)";
+    "INSERT INTO `cron` (`id`,`user_id`,`username`,`job`,`status`) VALUES (?,?,?,?,?)";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -399,7 +399,7 @@ function shiftDishSchedule() {
               } else {
                 connection.query(
                   queryString4,
-                  ["DEFAULT", rows3[0].user_id, "dish", 0],
+                  ["DEFAULT", rows3[0].user_id, rows3[0].username, "dish", 0],
                   (err4, rows4, fields4) => {
                     if (err4) {
                       throw err4;

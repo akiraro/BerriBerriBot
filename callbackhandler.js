@@ -47,7 +47,6 @@ exports.handler = (cbQuery, res) => {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
       cronControllers.changeStatus("cook", res);
-      // cronControllers.shiftCookSchedule(res);
     } else {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
@@ -63,7 +62,6 @@ exports.handler = (cbQuery, res) => {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
       cronControllers.changeStatus("dish", res);
-      // cronControllers.shiftCookSchedule(res);
     } else {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
@@ -79,7 +77,6 @@ exports.handler = (cbQuery, res) => {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
       cronControllers.changeStatus("trash", res);
-      // cronControllers.shiftTrashSchedule(res);
     } else {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
@@ -95,7 +92,6 @@ exports.handler = (cbQuery, res) => {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(cbQuery.message.chat.id, "Thank you !", null, res);
       cronControllers.changeStatus("clean", res);
-      // cronControllers.shiftCleanSchedule(res);
     } else {
       Message.deleteMessage(cbQuery, res);
       Message.sendMessage(
