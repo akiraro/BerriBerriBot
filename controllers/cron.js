@@ -100,11 +100,13 @@ function processReminder(data) {
   var n = getDay(d.getDay());
 
   for (var i = 0; i < data.length; i++) {
+    console.log(data[i]);
     switch (data[i].job) {
       case "cook":
         Message.sendCronMessage(data[i].user_id, generateMessage(data[i].job), {
           inline_keyboard: generateInlineKeyboard(data[i].job)
         });
+        console.log("COOK", data[i]);
         break;
 
       case "clean":
@@ -117,12 +119,14 @@ function processReminder(data) {
             }
           );
         }
+        console.log("Clean", data[i]);
         break;
 
       case "dish":
         Message.sendCronMessage(data[i].user_id, generateMessage(data[i].job), {
           inline_keyboard: generateInlineKeyboard(data[i].job)
         });
+        console.log("Dish", data[i]);
         break;
 
       case "trash":
@@ -134,6 +138,7 @@ function processReminder(data) {
               inline_keyboard: generateInlineKeyboard(data[i].job)
             }
           );
+          console.log("Trash", data[i]);
         }
         break;
     }
@@ -147,7 +152,6 @@ function processReminder(data) {
 
 exports.sendReminder = () => {
   const queryString = "SELECT * FROM cron WHERE status = 0";
-  const queryString2 = "SELECT status FROM `?` WHERE user_id = ?";
 
   pool.getConnection(function(err, connection) {
     if (err) throw err;

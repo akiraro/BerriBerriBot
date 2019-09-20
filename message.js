@@ -22,7 +22,7 @@ exports.sendMessage = (chat_id, text, keyboard, res) => {
       res.end("ok");
     })
     .catch(err => {
-      console.log("Error :", err);
+      console.log("Error :", err.response.data);
       res.end("Error :" + err);
     });
 };
@@ -48,7 +48,7 @@ exports.sendCronMessage = (chat_id, text, keyboard) => {
       console.log("Message posted");
     })
     .catch(err => {
-      console.log("Error :", err);
+      console.log("Error :", err.response.data);
     });
 };
 
@@ -70,7 +70,7 @@ exports.editMessage = (cbQuery, text, keyboard, res) => {
     })
     .catch(err => {
       console.log("\n ---------ERROR------------");
-      console.log(err);
+      console.log(err.response.data);
       res.end();
     });
 };
@@ -91,7 +91,7 @@ exports.deleteMessage = (cbQuery, res) => {
     })
     .catch(err => {
       console.log("\n ---------ERROR------------");
-      console.log(err);
+      console.log(err.response.data);
       res.end();
     });
 };
